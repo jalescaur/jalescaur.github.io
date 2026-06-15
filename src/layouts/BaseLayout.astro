@@ -1,0 +1,189 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+interface Props { title?: string; description?: string; }
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const { title = t('site.title'), description = t('site.description') } = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, 'https://jalescaur.com');
+const fullTitle = title === t('site.title') ? title : `${title} · ${t('site.title')}`;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Jales Caur, International Relations, Relações Internacionais, Planetary Politics, Política Planetária, IR Theory, Data Science, OSINT, Political Consultant, BMJ Consultores, IREL UnB, Doutorado, PhD, Brasília, Lakatos, MSRP, Anthropocene" />
+    <meta name="author" content="Jales Caur de Sousa" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="jales caur" />
+    <meta property="og:locale" content={lang === 'pt' ? 'pt_BR' : 'en_US'} />
+    <meta property="profile:first_name" content="Jales" />
+    <meta property="profile:last_name" content="Caur" />
+
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Schema.org JSON-LD — Person -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Jales Caur de Sousa",
+      "alternateName": "Jales Caur",
+      "url": "https://jalescaur.com",
+      "email": "contact@jalescaur.com",
+      "jobTitle": "PhD Candidate in International Relations; Political and Data Consultant",
+      "description": "Doctoral candidate at IREL/UnB researching planetary politics and IR metatheory. Political and Data Consultant at BMJ Consultores Associados leading the BMJ Digital product.",
+      "affiliation": [
+        {
+          "@type": "Organization",
+          "name": "University of Brasília — IREL",
+          "url": "https://irel.unb.br"
+        },
+        {
+          "@type": "Organization",
+          "name": "BMJ Consultores Associados",
+          "url": "https://bmj.com.br"
+        }
+      ],
+      "alumniOf": [
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "University of Brasília",
+          "url": "https://unb.br"
+        },
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Estácio"
+        }
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/jalescaur/",
+        "https://orcid.org/0000-0002-4057-9681",
+        "http://lattes.cnpq.br/9989811261390202"
+      ],
+      "knowsAbout": [
+        "International Relations Theory",
+        "Planetary Politics",
+        "Philosophy of Science",
+        "Metatheory",
+        "Data Science",
+        "OSINT",
+        "Discourse Analysis",
+        "Political Risk",
+        "Anthropocene"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Brasília",
+        "addressRegion": "DF",
+        "addressCountry": "BR"
+      }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --cream:        #F6F1E7;
+    --cream-dark:   #EDE5D0;
+    --cream-mid:    #DDD4BC;
+    --ink:          #1C1810;
+    --ink-mid:      #3D3426;
+    --ink-light:    #6B5D4A;
+    --ink-faint:    #9C8E7A;
+    --accent:       #7B4F2E;
+    --accent-gold:  #A07840;
+    --rule:         rgba(123, 79, 46, 0.22);
+
+    --font-serif:   'EB Garamond', 'Georgia', serif;
+    --font-display: 'Cormorant Garamond', 'Georgia', serif;
+    --font-sans:    'Inter', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body { min-height: 100vh; }
+
+  main {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-decoration-color: var(--rule); }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  h1 { font-size: clamp(2.6rem, 5vw, 4rem); font-style: italic; }
+  h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 1.25rem; }
+  h3 { font-size: 1.2rem; font-weight: 500; }
+
+  p { color: var(--ink-mid); line-height: 1.85; }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  hr.rule {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 2.5rem 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
