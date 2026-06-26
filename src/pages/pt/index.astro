@@ -5,7 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 <BaseLayout>
   <section class="hero">
     <div class="hero-photo">
-      <img src="/foto.jpg" alt="Jales Caur" />
+      <img src="/foto.png" alt="Jales Caur" />
     </div>
     <div class="hero-content">
       <span class="eyebrow">RI · Dados · Consultoria</span>
@@ -107,7 +107,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   .hero {
     padding: 4rem 0 3rem;
     display: grid;
-    grid-template-columns: 260px 1fr;
+    grid-template-columns: 340px 1fr;
     gap: 4rem;
     align-items: start;
   }
@@ -125,16 +125,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     object-position: top center;
     display: block;
     border-radius: 2px;
-    filter: sepia(0.75) brightness(0.88);
-    opacity: 0.55;
-    transform: scale(1.0);
-    transition: filter 0.45s ease, opacity 0.45s ease, transform 0.45s ease;
-  }
-
-  .hero-photo img:hover {
-    filter: sepia(0) brightness(1);
-    opacity: 1;
-    transform: scale(1.06);
+    cursor: zoom-in;
   }
 
   .hero-content { min-width: 0; }

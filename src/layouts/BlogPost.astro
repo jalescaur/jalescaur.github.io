@@ -7,9 +7,12 @@ interface Props {
   pubDate: Date;
   updatedDate?: Date;
   heroImage?: string;
+  lang?: string;
 }
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, lang } = Astro.props;
+const locale = lang === 'pt' ? 'pt-BR' : 'en-US';
+const dateOpts: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
 ---
 
 <BaseLayout title={title} description={description}>
@@ -20,12 +23,12 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
       <h1>{title}</h1>
       <div class="post-meta">
         <time datetime={pubDate.toISOString()}>
-          {pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          {pubDate.toLocaleDateString(locale, dateOpts)}
         </time>
         {updatedDate && (
           <span class="updated">
-            · Updated <time datetime={updatedDate.toISOString()}>
-              {updatedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            · <time datetime={updatedDate.toISOString()}>
+              {updatedDate.toLocaleDateString(locale, dateOpts)}
             </time>
           </span>
         )}
@@ -86,6 +89,18 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
     margin: 1.5rem 0;
     font-family: var(--font-sans);
     font-size: 0.875rem;
+  }
+  .prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1.5rem auto;
+    border-radius: 2px;
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
+  }
+  .prose :global(img:hover) {
+    transform: scale(1.03);
   }
   .prose :global(ul), .prose :global(ol) {
     padding-left: 1.5rem;

@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-const posts = (await getCollection('blog')).sort((a,b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const posts = (await getCollection('blog'))
+  .filter(post => post.data.lang === 'pt')
+  .sort((a,b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 <BaseLayout title="Blog">
   <section class="page-header">
@@ -11,8 +13,8 @@ const posts = (await getCollection('blog')).sort((a,b) => b.data.pubDate.valueOf
   <div class="post-list">
     {posts.length === 0 && <p class="empty">Nenhum post ainda — em breve.</p>}
     {posts.map(post => (
-      <a href={`/blog/${post.slug}`} class="post-item">
-        <div class="post-date">{post.data.pubDate.toLocaleDateString('pt-BR', { year:'numeric', month:'short', day:'numeric' })}</div>
+      <a href={`/pt/blog/${post.id}`} class="post-item">
+        <div class="post-date">{post.data.pubDate.toLocaleDateString('pt-BR', { year:'numeric', month:'short', day:'numeric', timeZone:'UTC' })}</div>
         <div class="post-content">
           <div class="post-title">{post.data.title}</div>
           {post.data.description && <div class="post-desc">{post.data.description}</div>}
