@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Home EN -->
+  <url>
+    <loc>https://jalescaur.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jalescaur.com/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://jalescaur.com/pt/"/>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Home PT -->
+  <url>
+    <loc>https://jalescaur.com/pt/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jalescaur.com/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://jalescaur.com/pt/"/>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Research EN -->
+  <url>
+    <loc>https://jalescaur.com/research/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jalescaur.com/research/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://jalescaur.com/pt/research/"/>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Research PT -->
+  <url>
+    <loc>https://jalescaur.com/pt/research/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jalescaur.com/research/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://jalescaur.com/pt/research/"/>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- CV EN -->
+  <url>
+    <loc>https://jalescaur.com/cv/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jalescaur.com/cv/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://jalescaur.com/pt/cv/"/>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- CV PT -->
+  <url>
+    <loc>https://jalescaur.com/pt/cv/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jalescaur.com/cv/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://jalescaur.com/pt/cv/"/>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog EN -->
+  <url>
+    <loc>https://jalescaur.com/blog/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jalescaur.com/blog/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://jalescaur.com/pt/blog/"/>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog PT -->
+  <url>
+    <loc>https://jalescaur.com/pt/blog/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jalescaur.com/blog/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://jalescaur.com/pt/blog/"/>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog Post PT: Tudo é dado, nada é dado -->
+  <url>
+    <loc>https://jalescaur.com/pt/blog/2026-6-26/tudo-e-dado-nada-e-dado/</loc>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>
