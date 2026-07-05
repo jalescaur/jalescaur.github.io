@@ -1,11 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+const recentPosts = (await getCollection('blog'))
+  .filter(post => post.data.lang !== 'pt')
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
 <BaseLayout>
   <section class="hero">
     <div class="hero-photo">
-      <img src="/foto.png" alt="Jales Caur" />
+      <img src="/foto.webp" alt="Jales Caur" fetchpriority="high" width="260" height="347" />
     </div>
     <div class="hero-content">
       <span class="eyebrow">IR · Data · Consulting</span>
@@ -28,6 +33,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <hr class="rule" />
 
   <section class="section-grid">
+    <h2 class="sr-only">Current work</h2>
     <div class="section-label">
       <span class="eyebrow">Current work</span>
     </div>
@@ -50,6 +56,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <hr class="rule" />
 
   <section class="section-grid">
+    <h2 class="sr-only">Recent output</h2>
     <div class="section-label">
       <span class="eyebrow">Recent output</span>
     </div>
@@ -75,6 +82,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <hr class="rule" />
 
   <section class="section-grid">
+    <h2 class="sr-only">Coming soon</h2>
     <div class="section-label">
       <span class="eyebrow">Coming soon</span>
     </div>
@@ -101,13 +109,39 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
   </section>
+
+  <hr class="rule" />
+
+  <section class="section-grid">
+    <h2 class="sr-only">Blog</h2>
+    <div class="section-label">
+      <span class="eyebrow">Blog</span>
+    </div>
+    <div class="section-content blog-cards">
+      {recentPosts.map(post => (
+        <a href={`/blog/${post.id}`} class="blog-card">
+          <div class="blog-card-date">{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</div>
+          <div class="blog-card-title">{post.data.title}</div>
+          {post.data.description && <div class="blog-card-desc">{post.data.description}</div>}
+        </a>
+      ))}
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+  }
+
   .hero {
     padding: 4rem 0 3rem;
     display: grid;
-    grid-template-columns: 340px 1fr;
+    grid-template-columns: 280px 1fr;
     gap: 4rem;
     align-items: start;
   }
@@ -116,6 +150,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     position: sticky;
     top: 80px;
     overflow: hidden;
+    box-shadow: 4px 6px 24px rgba(44, 36, 22, 0.12);
   }
 
   .hero-photo img {
@@ -124,20 +159,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     object-fit: cover;
     object-position: top center;
     display: block;
-    border-radius: 2px;
+    border-radius: 0;
     cursor: zoom-in;
+    filter: sepia(0);
+    transition: filter 0.3s ease, transform 0.3s ease;
+  }
+
+  .hero-photo:hover img {
+    filter: sepia(0.35);
+    transform: scale(1.03);
   }
 
   .hero-content { min-width: 0; }
 
-  h1 { margin-bottom: 0.5rem; color: var(--ink); }
+  .hero-content .eyebrow { margin-bottom: 1.25rem; }
+
+  h1 { margin-bottom: 1rem; color: var(--ink); }
 
   .tagline {
     font-family: var(--font-display);
     font-style: italic;
     font-size: 1.15rem;
     color: var(--ink-light);
-    margin-bottom: 1.25rem;
+    margin-bottom: 2rem;
     line-height: 1.5;
     display: block;
   }
@@ -155,7 +199,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   .hero-contact a {
-    color: var(--ink-faint);
+    color: var(--ink-light);
     text-decoration: none;
     transition: color 0.15s;
   }
@@ -212,7 +256,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-family: var(--font-sans);
     font-size: 0.72rem;
     letter-spacing: 0.06em;
-    color: var(--ink-faint);
+    color: var(--ink-light);
     text-transform: uppercase;
     margin-bottom: 0.4rem;
   }
@@ -221,6 +265,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .entry h3 a { color: var(--ink); }
   .entry h3 a:hover { color: var(--accent); text-decoration: none; }
   .entry p { font-size: 0.95rem; }
+
+  .blog-cards { display: flex; flex-direction: column; gap: 0; }
+  .blog-card {
+    display: block;
+    padding: 1.25rem 0;
+    border-bottom: 0.5px solid var(--color-border);
+    text-decoration: none;
+    transition: padding-left 0.2s ease;
+  }
+  .blog-card:first-child { border-top: 0.5px solid var(--color-border); }
+  .blog-card:hover { padding-left: 0.5rem; text-decoration: none; }
+  .blog-card-date { font-family: var(--font-sans); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.3rem; }
+  .blog-card-title { font-family: var(--font-display); font-size: 1.05rem; font-style: italic; color: var(--ink); margin-bottom: 0.2rem; transition: color 0.15s; }
+  .blog-card:hover .blog-card-title { color: var(--accent); }
+  .blog-card-desc { font-size: 0.85rem; color: var(--ink-light); }
 
   @media (max-width: 720px) {
     .hero { grid-template-columns: 1fr; gap: 2rem; }

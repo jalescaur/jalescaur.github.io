@@ -101,29 +101,44 @@ const fullTitle = title === t('site.title') ? title : `${title} · ${t('site.tit
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500&display=swap"
+      />
+    </noscript>
   </head>
   <body>
-    <Header />
-    <main>
-      <slot />
-    </main>
-    <Footer />
+    <div class="page-frame">
+      <Header />
+      <main>
+        <slot />
+      </main>
+      <Footer />
+    </div>
   </body>
 </html>
 
 <style is:global>
   :root {
-    --cream:        #F6F1E7;
-    --cream-dark:   #EDE5D0;
-    --cream-mid:    #DDD4BC;
-    --ink:          #1C1810;
-    --ink-mid:      #3D3426;
-    --ink-light:    #6B5D4A;
-    --ink-faint:    #9C8E7A;
-    --accent:       #7B4F2E;
-    --accent-gold:  #A07840;
-    --rule:         rgba(123, 79, 46, 0.22);
+    --cream:        #FAF8F5;
+    --cream-dark:   #F2EEE8;
+    --cream-mid:    #D9D2C5;
+    --ink:          #2C2416;
+    --ink-mid:      #4A3F30;
+    --ink-light:    #7A6E60;
+    --ink-faint:    #A89E92;
+    --accent:       #5C4A32;
+    --accent-hover: #3D3020;
+    --accent-dim:   rgba(92, 74, 50, 0.08);
+    --rule:         #D9D2C5;
+    --color-border: #D9D2C5;
 
     --font-serif:   'EB Garamond', 'Georgia', serif;
     --font-display: 'Cormorant Garamond', 'Georgia', serif;
@@ -133,24 +148,24 @@ const fullTitle = title === t('site.title') ? title : `${title} · ${t('site.tit
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html {
-    background: var(--cream);
+    background: #FFFFFF;
     color: var(--ink);
     font-family: var(--font-serif);
-    font-size: 17px;
+    font-size: 18px;
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
   }
 
-  body { min-height: 100vh; }
+  body { min-height: 100vh; background: #FFFFFF; }
 
   main {
-    max-width: 840px;
+    max-width: 1040px;
     margin: 0 auto;
     padding: 3rem 2rem 5rem;
   }
 
   a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; text-decoration-color: var(--rule); }
+  a:hover { color: var(--accent-hover); text-decoration: underline; text-decoration-color: var(--rule); }
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
@@ -160,27 +175,34 @@ const fullTitle = title === t('site.title') ? title : `${title} · ${t('site.tit
     color: var(--ink);
   }
 
-  h1 { font-size: clamp(2.6rem, 5vw, 4rem); font-style: italic; }
+  h1 { font-size: clamp(3rem, 6vw, 4.75rem); font-style: italic; }
   h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 1.25rem; }
   h3 { font-size: 1.2rem; font-weight: 500; }
 
-  p { color: var(--ink-mid); line-height: 1.85; }
+  p { font-family: var(--font-serif); color: var(--ink-mid); line-height: 1.9; }
 
   .eyebrow {
     font-family: var(--font-sans);
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: 500;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--ink-faint);
     margin-bottom: 0.75rem;
     display: block;
   }
 
   hr.rule {
     border: none;
-    border-top: 1px solid var(--rule);
-    margin: 2.5rem 0;
+    border-top: 0.5px solid var(--rule);
+    margin: 3rem 0;
+  }
+
+  .page-frame {
+    margin: 12px;
+    min-height: calc(100vh - 24px);
+    background: var(--cream);
+    border: 0.5px solid rgba(92, 74, 50, 0.12);
   }
 
   @media (prefers-reduced-motion: reduce) {

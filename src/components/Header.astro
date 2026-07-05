@@ -36,7 +36,6 @@ const ptPath = lang === 'en' ? `/pt${currentPath === '/' ? '' : currentPath}` : 
       </div>
     </div>
   </div>
-  <div class="header-rule"></div>
 </header>
 
 <style>
@@ -49,10 +48,11 @@ const ptPath = lang === 'en' ? `/pt${currentPath === '/' ? '' : currentPath}` : 
   }
 
   .header-inner {
-    max-width: 840px;
+    max-width: 1040px;
     margin: 0 auto;
     padding: 0 2rem;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     height: 58px;
     gap: 2rem;
@@ -66,13 +66,14 @@ const ptPath = lang === 'en' ? `/pt${currentPath === '/' ? '' : currentPath}` : 
     color: var(--ink);
     text-decoration: none;
     letter-spacing: 0.01em;
-    margin-right: auto;
+    justify-self: start;
   }
   .site-name:hover { text-decoration: none; color: var(--accent); }
 
   nav {
     display: flex;
     gap: 1.75rem;
+    justify-self: center;
   }
 
   nav a {
@@ -91,6 +92,7 @@ const ptPath = lang === 'en' ? `/pt${currentPath === '/' ? '' : currentPath}` : 
     display: flex;
     align-items: center;
     gap: 1rem;
+    justify-self: end;
   }
 
   .icon-link {
@@ -117,7 +119,7 @@ const ptPath = lang === 'en' ? `/pt${currentPath === '/' ? '' : currentPath}` : 
   }
 
   .lang-inactive {
-    color: var(--ink-faint);
+    color: var(--ink-light);
     text-decoration: none;
     transition: color 0.15s;
   }
@@ -128,28 +130,20 @@ const ptPath = lang === 'en' ? `/pt${currentPath === '/' ? '' : currentPath}` : 
     opacity: 0.5;
   }
 
-  .header-rule {
-    height: 1px;
-    background: var(--rule);
-    max-width: 840px;
-    margin: 0 auto;
-  }
-
   .lattes-badge {
   font-family: var(--font-sans);
   font-size: 0.65rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  color: var(--ink-light);
   text-decoration: none;
   transition: color 0.15s;
   }
   .lattes-badge:hover { color: var(--accent); text-decoration: none; }
 
   @media (max-width: 640px) {
-    .header-inner { flex-wrap: wrap; height: auto; padding: 0.75rem 1rem; }
-    nav { order: 3; width: 100%; gap: 1rem; }
-    .site-name { margin-right: 0; }
+    .header-inner { display: flex; flex-wrap: wrap; height: auto; padding: 0.75rem 1rem; }
+    nav { order: 3; width: 100%; gap: 1rem; justify-self: auto; }
   }
 </style>
