@@ -23,7 +23,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   <hr class="rule" />
 
-<section class="cv-block">
+  <section class="cv-block">
+    <h2>Areas of Interest</h2>
+    <div class="areas">
+      <div class="area-tag">IR Theories and Metatheories</div>
+      <div class="area-tag">Planetary Politics</div>
+      <div class="area-tag">Post-Newtonian ontologies</div>
+      <div class="area-tag">Complexity & Relationality</div>
+      <div class="area-tag">Philosophy of Science in IR</div>
+      <div class="area-tag">Climate Change</div>
+      <div class="area-tag">Data Science</div>
+      <div class="area-tag">OSINT and Social Media</div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+<section class="cv-block" id="publications">
   <h2>Publications</h2>
 
   <h3 class="pub-category">Journal Articles</h3>
@@ -78,6 +94,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <h3 class="pub-category">Conference Papers</h3>
   <br>
   <div class="cv-entry">
+    <div class="cv-meta">2026</div>
+    <div class="cv-body">
+      Caur, J. Fear, Identity and Agency Online: Tracing New International Narratives Through Social Listening and Digital Observation.
+      IPSA RC 44 &amp; RC 52 Conference, Aug. 4, 2026.
+    </div>
+  </div>
+  <div class="cv-entry">
+    <div class="cv-meta">2026</div>
+    <div class="cv-body">
+      Caur, J. Planetary Thinking: A New Ontology for International Relations?
+      ISA 2026 Virtual Conference, Jul. 28, 2026.
+    </div>
+  </div>
+  <div class="cv-entry">
+    <div class="cv-meta">2026</div>
+    <div class="cv-body">
+      Caur, J. Befriending the Enemy: Generative Artificial Intelligence on IR Research.
+      ISA 2026 Virtual Conference, Jul. 28, 2026.
+    </div>
+  </div>
+  <div class="cv-entry">
     <div class="cv-meta">2025</div>
     <div class="cv-body">
       Caur, J.; Lass, B. Rethinking the 'Global South' Through Complexity Theory in International Relations.
@@ -97,15 +134,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       Caur, J. A trajetória nuclear brasileira no século XX: o processo de nuclearização do Brasil pela ótica da ambiguidade e da opacidade nuclear
       [Brazil's nuclear trajectory in the 20th century: nuclearization through the lens of ambiguity and opacity].
       26º Congresso de Iniciação Científica da UnB, 2020.
-    </div>
-  </div>
-
-  <h3 class="pub-category">Software</h3>
-  <br>
-  <div class="cv-entry">
-    <div class="cv-meta">2026</div>
-    <div class="cv-body">
-      Caur, J.; Kreuz, J. <em>Trade Vulnerabilities Toolkit</em>. 2026.
     </div>
   </div>
 
@@ -217,21 +245,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 </section>
 
-  <hr class="rule" />
-
-  <section class="cv-block">
-    <h2>Areas of Interest</h2>
-    <div class="areas">
-      <div class="area-tag">IR Theories and Metatheories</div>
-      <div class="area-tag">Planetary Politics</div>
-      <div class="area-tag">Post-Newtonian ontologies</div>
-      <div class="area-tag">Complexity & Relationality</div>
-      <div class="area-tag">Philosophy of Science in IR</div>
-      <div class="area-tag">Climate Change</div>
-      <div class="area-tag">Data Science</div>
-      <div class="area-tag">OSINT and Social Media</div>
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
@@ -252,9 +265,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     flex-wrap: wrap;
     gap: 0.5rem 1.5rem;
     margin-bottom: 1rem;
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--ink-faint);
   }
@@ -278,14 +291,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     gap: 0 2rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(123, 79, 46, 0.08);
+    border-bottom: 1px solid var(--rule);
   }
   .cv-entry:last-child { border-bottom: none; }
 
   .cv-meta {
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
     color: var(--ink-faint);
     padding-top: 0.2rem;
     text-transform: uppercase;
@@ -301,9 +314,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   .area-tag {
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--accent);
     border: 1px solid var(--rule);

@@ -24,6 +24,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   <hr class="rule" />
 
   <section class="cv-block">
+    <h2>Áreas de Interesse</h2>
+    <div class="areas">
+      <div class="area-tag">Teorias e Metateoriais de RI</div>
+      <div class="area-tag">Política Planetária</div>
+      <div class="area-tag">Ontologias Pós-Newtonianas</div>
+      <div class="area-tag">Complexidade &amp; Relacionalidade</div>
+      <div class="area-tag">Filosofia da Ciência em RI</div>
+      <div class="area-tag">Mudanças Climáticas</div>
+      <div class="area-tag">Ciência de Dados</div>
+      <div class="area-tag">OSINT e Mídias Sociais</div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="cv-block" id="publications">
     <h2>Publicações</h2>
 
     <h3 class="pub-category">Artigos em Periódicos</h3>
@@ -74,6 +90,27 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <h3 class="pub-category">Artigos em Congressos</h3>
     <br>
     <div class="cv-entry">
+      <div class="cv-meta">2026</div>
+      <div class="cv-body">
+        Caur, J. Fear, Identity and Agency Online: Tracing New International Narratives Through Social Listening and Digital Observation.
+        IPSA RC 44 &amp; RC 52 Conference, 4 ago. 2026.
+      </div>
+    </div>
+    <div class="cv-entry">
+      <div class="cv-meta">2026</div>
+      <div class="cv-body">
+        Caur, J. Planetary Thinking: A New Ontology for International Relations?
+        ISA 2026 Virtual Conference, 28 jul. 2026.
+      </div>
+    </div>
+    <div class="cv-entry">
+      <div class="cv-meta">2026</div>
+      <div class="cv-body">
+        Caur, J. Befriending the Enemy: Generative Artificial Intelligence on IR Research.
+        ISA 2026 Virtual Conference, 28 jul. 2026.
+      </div>
+    </div>
+    <div class="cv-entry">
       <div class="cv-meta">2025</div>
       <div class="cv-body">
         Caur, J.; Lass, B. Rethinking the 'Global South' Through Complexity Theory in International Relations.
@@ -92,15 +129,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <div class="cv-body">
         Caur, J. A trajetória nuclear brasileira no século XX: o processo de nuclearização do Brasil pela ótica da ambiguidade e da opacidade nuclear.
         <em>26º Congresso de Iniciação Científica da UnB</em>. Brasília: UnB, 2020.
-      </div>
-    </div>
-
-    <h3 class="pub-category">Software</h3>
-    <br>
-    <div class="cv-entry">
-      <div class="cv-meta">2026</div>
-      <div class="cv-body">
-        Caur, J.; Kreuz, J. <em>Trade Vulnerabilities Toolkit</em>. 2026.
       </div>
     </div>
 
@@ -203,22 +231,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </div>
   </section>
-
-  <hr class="rule" />
-
-  <section class="cv-block">
-    <h2>Áreas de Interesse</h2>
-    <div class="areas">
-      <div class="area-tag">Teorias e Metateoriais de RI</div>
-      <div class="area-tag">Política Planetária</div>
-      <div class="area-tag">Ontologias Pós-Newtonianas</div>
-      <div class="area-tag">Complexidade &amp; Relacionalidade</div>
-      <div class="area-tag">Filosofia da Ciência em RI</div>
-      <div class="area-tag">Mudanças Climáticas</div>
-      <div class="area-tag">Ciência de Dados</div>
-      <div class="area-tag">OSINT e Mídias Sociais</div>
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
@@ -239,9 +251,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     flex-wrap: wrap;
     gap: 0.5rem 1.5rem;
     margin-bottom: 1rem;
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--ink-faint);
   }
@@ -265,14 +277,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     gap: 0 2rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(123, 79, 46, 0.08);
+    border-bottom: 1px solid var(--rule);
   }
   .cv-entry:last-child { border-bottom: none; }
 
   .cv-meta {
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
     color: var(--ink-faint);
     padding-top: 0.2rem;
     text-transform: uppercase;
@@ -288,8 +300,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   }
 
   .area-tag {
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
+    font-family: var(--font-label);
+    font-size: 0.78rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--accent);

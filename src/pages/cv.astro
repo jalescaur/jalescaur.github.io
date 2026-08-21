@@ -1,20 +1,32 @@
 ---
+import fs from 'node:fs';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const cvPhotoUrl = new URL('../../public/foto-cv.jpg', import.meta.url);
+const hasCvPhoto = fs.existsSync(cvPhotoUrl);
 ---
 
 <BaseLayout title="Curriculum Vitae">
   <section class="page-header">
-    <span class="eyebrow">Curriculum Vitae</span>
-    <h1>Jales Caur, PhD(c)</h1>
-    <p class="subtitle">PhD Candidate in International Relations · Political & Data Consultant</p>
-    <div class="contact-line">
-      <a href="mailto:contact@jalescaur.com">contact@jalescaur.com</a>
-      <span class="sep">·</span>
-      <a href="https://www.linkedin.com/in/jalescaur/" target="_blank">LinkedIn</a>
-      <span class="sep">·</span>
-      <a href="http://lattes.cnpq.br/9989811261390202" target="_blank">Lattes</a>
-      <span class="sep">·</span>
-      <a href="https://orcid.org/0000-0002-4057-9681" target="_blank">ORCID</a>
+    <div class="cv-photo">
+      {hasCvPhoto
+        ? <img src="/foto-cv.jpg" alt="Jales Caur" width="220" height="280" />
+        : <div class="cv-photo-placeholder">Photo</div>
+      }
+    </div>
+    <div class="page-header-text">
+      <span class="eyebrow">Curriculum Vitae</span>
+      <h1>Jales Caur, PhD(c)</h1>
+      <p class="subtitle">PhD Candidate in International Relations · Political & Data Consultant</p>
+      <div class="contact-line">
+        <a href="mailto:contact@jalescaur.com">contact@jalescaur.com</a>
+        <span class="sep">·</span>
+        <a href="https://www.linkedin.com/in/jalescaur/" target="_blank">LinkedIn</a>
+        <span class="sep">·</span>
+        <a href="http://lattes.cnpq.br/9989811261390202" target="_blank">Lattes</a>
+        <span class="sep">·</span>
+        <a href="https://orcid.org/0000-0002-4057-9681" target="_blank">ORCID</a>
+      </div>
     </div>
   </section>
 
@@ -177,18 +189,52 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <style>
-  .page-header { padding: 3.5rem 0 2rem; }
-  h1 { margin-bottom: 0.5rem; }
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2.5rem;
+    padding: 3.5rem 0 2rem;
+  }
+  .page-header-text { flex: 1; min-width: 0; }
+
+  .cv-photo { flex-shrink: 0; }
+  .cv-photo img {
+    display: block;
+    width: 140px;
+    height: 176px;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.1);
+    border: 1px solid var(--rule);
+  }
+  .cv-photo-placeholder {
+    width: 140px;
+    height: 176px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.5rem;
+    border: 1px dashed var(--rule);
+    background: var(--cream-dark);
+    font-family: var(--font-label);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  h1 { margin-bottom: 0.5rem; font-family: var(--font-name); font-weight: 400; }
   .subtitle {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 1.05rem;
+    font-family: var(--font-label);
+    font-style: normal;
+    font-size: 0.9rem;
     color: var(--ink-light);
     margin-bottom: 1rem;
   }
   .contact-line {
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
+    font-family: var(--font-label);
+    font-size: 0.85rem;
     color: var(--ink-faint);
     letter-spacing: 0.04em;
   }
@@ -204,14 +250,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     gap: 0 2rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(123, 79, 46, 0.08);
+    border-bottom: 1px solid var(--rule);
   }
   .cv-entry:last-child { border-bottom: none; }
 
   .cv-meta {
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
     color: var(--ink-faint);
     padding-top: 0.2rem;
     text-transform: uppercase;
@@ -245,6 +291,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .lang-level { color: var(--ink-faint); font-size: 0.85rem; }
 
   @media (max-width: 640px) {
+    .page-header { flex-direction: column; gap: 1.5rem; }
+    .cv-photo img, .cv-photo-placeholder { width: 100px; height: 126px; }
     .cv-entry { grid-template-columns: 1fr; gap: 0.25rem; }
     .two-col { grid-template-columns: 1fr; gap: 1.5rem; }
   }
