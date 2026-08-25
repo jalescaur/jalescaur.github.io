@@ -1,9 +1,9 @@
 ---
 import fs from 'node:fs';
+import path from 'node:path';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const cvPhotoUrl = new URL('../../public/foto-cv.jpg', import.meta.url);
-const hasCvPhoto = fs.existsSync(cvPhotoUrl);
+const hasCvPhoto = fs.existsSync(path.resolve(process.cwd(), 'public/foto-cv.jpg'));
 ---
 
 <BaseLayout title="Curriculum Vitae">
