@@ -12,8 +12,9 @@ const posts = (await getCollection('blog'))
   </section>
   <div class="post-list">
     {posts.length === 0 && <p class="empty">Nenhum post ainda — em breve.</p>}
-    {posts.map(post => (
+    {posts.map((post, i) => (
       <a href={`/pt/blog/${post.id}`} class="post-item">
+        <div class="post-index">{String(i + 1).padStart(2, '0')}</div>
         <div class="post-date">{post.data.pubDate.toLocaleDateString('pt-BR', { year:'numeric', month:'short', day:'numeric', timeZone:'UTC' })}</div>
         <div class="post-content">
           <div class="post-title">{post.data.title}</div>
@@ -27,11 +28,13 @@ const posts = (await getCollection('blog'))
   .page-header { padding: 3.5rem 0 2rem; }
   h1 { margin-bottom: 0; }
   .post-list { margin-top: 2rem; }
-  .post-item { display: grid; grid-template-columns: 110px 1fr; gap: 0 2rem; padding: 1.5rem 0; border-bottom: 1px solid var(--rule); text-decoration: none; }
-  .post-item:hover .post-title { color: var(--accent); }
-  .post-item:hover { text-decoration: none; }
+  .post-item { display: grid; grid-template-columns: 2.5rem 110px 1fr; gap: 0 2rem; padding: 1.5rem 0; border-bottom: 1px solid var(--rule); text-decoration: none; }
+  .post-item:hover .post-title { text-decoration: underline; text-underline-offset: 3px; }
+  .post-item:hover .post-index { color: var(--ink); }
+  .post-index { font-family: var(--font-label); font-size: 0.78rem; color: var(--ink-faint); padding-top: 0.15rem; font-variant-numeric: tabular-nums; }
   .post-date { font-family: var(--font-sans); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); padding-top: 0.15rem; }
-  .post-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--ink); transition: color 0.15s; margin-bottom: 0.3rem; }
+  .post-title { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
   .post-desc { font-size: 0.9rem; color: var(--ink-light); }
   .empty { color: var(--ink-faint); font-style: italic; }
+  @media (max-width: 640px) { .post-item { grid-template-columns: 2rem 1fr; } .post-date { display: none; } }
 </style>
