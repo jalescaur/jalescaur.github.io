@@ -17,7 +17,7 @@ const dateOpts: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', d
 
 <BaseLayout title={title} description={description}>
   <article>
-    {heroImage && <img class="hero-image" src={heroImage} alt="" />}
+    {heroImage && <img class="hero-image tone-photo" src={heroImage} alt="" />}
     <div class="post-header">
       <span class="eyebrow">Blog</span>
       <h1>{title}</h1>
@@ -46,7 +46,7 @@ const dateOpts: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', d
     width: 100%;
     max-height: 360px;
     object-fit: cover;
-    border-radius: 2px;
+    border: 1px solid var(--ink-18);
     margin-bottom: 2rem;
   }
 
@@ -75,7 +75,8 @@ const dateOpts: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', d
   .prose :global(h2) { margin-top: 2.5rem; margin-bottom: 1rem; font-family: var(--font-display); }
   .prose :global(h3) { margin-top: 2rem; margin-bottom: 0.75rem; font-family: var(--font-display); }
   .prose :global(p) { margin-bottom: 1.25rem; font-family: var(--font-serif); }
-  .prose :global(a) { color: var(--accent); }
+  .prose :global(a) { color: var(--ink); text-decoration: underline; text-decoration-color: var(--ink-35); text-underline-offset: 2px; }
+  .prose :global(a:hover) { text-decoration-color: var(--ink); }
   .prose :global(strong) { font-family: var(--font-serif); }
   .prose :global(blockquote) {
     border-left: 2px solid var(--rule);
@@ -88,7 +89,6 @@ const dateOpts: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', d
   .prose :global(pre) {
     background: var(--cream-dark);
     border: 1px solid var(--cream-mid);
-    border-radius: 2px;
     padding: 1.25rem;
     overflow-x: auto;
     margin: 1.5rem 0;
@@ -100,12 +100,7 @@ const dateOpts: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', d
     height: auto;
     display: block;
     margin: 1.5rem auto;
-    border-radius: 2px;
-    cursor: zoom-in;
-    transition: transform 0.3s ease;
-  }
-  .prose :global(img:hover) {
-    transform: scale(1.03);
+    border: 1px solid var(--ink-18);
   }
   .prose :global(ul), .prose :global(ol) {
     padding-left: 1.5rem;

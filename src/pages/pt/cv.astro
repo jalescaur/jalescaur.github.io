@@ -10,7 +10,7 @@ const hasCvPhoto = fs.existsSync(path.resolve(process.cwd(), 'public/foto-cv.jpg
   <section class="page-header">
     <div class="cv-photo">
       {hasCvPhoto
-        ? <img src="/foto-cv.jpg" alt="Jales Caur" width="220" height="280" />
+        ? <img class="tone-photo" src="/foto-cv.jpg" alt="Jales Caur" width="220" height="280" />
         : <div class="cv-photo-placeholder">Foto</div>
       }
     </div>
@@ -270,7 +270,6 @@ const hasCvPhoto = fs.existsSync(path.resolve(process.cwd(), 'public/foto-cv.jpg
     width: 140px;
     height: 176px;
     object-fit: cover;
-    filter: grayscale(1) contrast(1.1);
     border: 1px solid var(--rule);
   }
   .cv-photo-placeholder {
