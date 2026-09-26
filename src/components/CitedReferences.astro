@@ -1,0 +1,109 @@
+---
+/**
+ * Reference list + two-way citation links for the Eurovision article.
+ *
+ * Renders the references with stable ids, then (in the browser) finds author-date
+ * citations in the article, e.g. "(Guisinger 2024)", "Gatherer (2006)",
+ * "(Nye 1990, 166–71; Nye 2004, 5–11)", "(Guardian 2024, 2026)", "(EBU 2022a)",
+ * "Eurovisionworld data", links each year to its reference, and adds back-links
+ * from every reference to the places it is cited.
+ */
+import { references, refId } from '../data/eurovision-refs';
+
+interface Props { heading: string; backLabel: string; }
+const { heading, backLabel } = Astro.props;
+
+// label -> year -> anchor id (the Portuguese text writes "s.d." for "n.d.")
+const citeMap: Record<string, Record<string, string>> = {};
+for (const r of references) {
+  (citeMap[r.label] ??= {})[r.year] = refId(r);
+  if (r.year === 'n.d.') citeMap[r.label]['s.d.'] = refId(r);
+}
+---
+
+<section class="ev-section ev-refs" id="references">
+  <h2>{heading}</h2>
+  <ul>
+    {references.map((r) => (
+      <li id={refId(r)}>
+        <span set:html={r.html} />
+        <span class="ref-back" data-label={backLabel}></span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<script is:inline define:vars={{ citeMap }}>
+  (() => {
+    const article = document.querySelector('article.ev');
+    if (!article || article.dataset.cited) return;
+    article.dataset.cited = '1';
+
+    const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const labels = Object.keys(citeMap).filter((l) => l !== 'Eurovisionworld').sort((a, b) => b.length - a.length);
+    const YEAR = String.raw`(?:19|20)\d\d[a-z]?(?![\d–-])|n\.d\.|s\.d\.`;
+    const NAME = String.raw`\p{Lu}[\p{L}'’-]*(?: \p{Lu}[\p{L}'’-]*)*`;
+    // co-authors / possessive between the first author and the year
+    const GAP = String.raw`(?:'s|’s|,? (?:and|e|&) ${NAME}|, ${NAME}| et al\.)*`;
+    const first = new RegExp(String.raw`(?<!\p{L})(${labels.map(esc).join('|')})((?:</em>)?${GAP},?\s?\(?)(${YEAR})`, 'gu');
+    // after a year: optional pages, then another year for the same author ("2024, 2026", "1990; 2004")
+    const more = new RegExp(String.raw`^((?:,\s?\d{1,4}[–-]\d+|,\s?\d{1,3}(?!\d))?[,;]\s?)(${YEAR})`, 'u');
+    const data = /(Eurovisionworld data|dados do Eurovisionworld)/g;
+
+    let n = 0;
+    const backs = {};
+    const link = (id, text) => {
+      const cid = `cite-${++n}`;
+      (backs[id] ??= []).push(cid);
+      return `<a class="cite" href="#${id}" id="${cid}">${text}</a>`;
+    };
+    const idFor = (label, year) => citeMap[label]?.[year];
+
+    const blocks = article.querySelectorAll('p, li, td, caption, .ev-read__src');
+    blocks.forEach((el) => {
+      if (el.closest('#references, nav, .ev-note')) return;
+      let html = el.innerHTML;
+      if (!/\d|[ns]\.d\.|Eurovisionworld/.test(html)) return;
+
+      let out = '';
+      let last = 0;
+      first.lastIndex = 0;
+      let m;
+      while ((m = first.exec(html))) {
+        const [whole, label, gap, year] = m;
+        let id = idFor(label, year);
+        out += html.slice(last, m.index) + label + gap + (id ? link(id, year) : year);
+        if (!id) console.warn('No reference for', label, year);
+        let rest = m.index + whole.length;
+        let k;
+        while ((k = more.exec(html.slice(rest)))) {
+          const [w2, sep, y2] = k;
+          id = idFor(label, y2);
+          out += sep + (id ? link(id, y2) : y2);
+          if (!id) console.warn('No reference for', label, y2);
+          rest += w2.length;
+        }
+        last = rest;
+        first.lastIndex = rest;
+      }
+      html = out + html.slice(last);
+      const dataId = idFor('Eurovisionworld', 'data');
+      html = html.replace(data, (t) => link(dataId, t));
+      if (el.classList.contains('ev-read__src')) {
+        html = html.replace(/(Data|Dados): Eurovisionworld/, (t, w) => `${w}: ${link(dataId, 'Eurovisionworld')}`);
+      }
+      el.innerHTML = html;
+    });
+
+    // back-links: ↑ for one citation, ↑ a b c … for several
+    document.querySelectorAll('#references li').forEach((li) => {
+      const ids = backs[li.id];
+      const box = li.querySelector('.ref-back');
+      if (!ids || !box) return;
+      const label = box.dataset.label;
+      box.innerHTML = ids.length === 1
+        ? `<a href="#${ids[0]}" aria-label="${label}">↑</a>`
+        : '↑ ' + ids.map((c, i) => `<a href="#${c}" aria-label="${label} ${i + 1}">${String.fromCharCode(97 + (i % 26))}</a>`).join(' ');
+    });
+  })();
+</script>

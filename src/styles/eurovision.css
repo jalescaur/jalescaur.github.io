@@ -1,0 +1,164 @@
+/* Eurovision decade article (EN + PT), in the site's Swiss black-on-white system.
+   Chart blocks follow the kit's gallery: black rule, title + description, plot on white. */
+
+.ev-hero { padding: 0 0 2rem; }
+.ev-hero h1 { margin-bottom: 1rem; }
+.ev-hero .dek {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  line-height: 1.4;
+  color: var(--ink-75);
+  max-width: 34ch;
+}
+.ev-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  margin-top: 1.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ink);
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-55);
+}
+
+.ev p { font-size: 1rem; line-height: 1.75; margin-bottom: 1.1rem; max-width: 68ch; }
+
+/* Contents list, gallery-style: numbered rows between black rules */
+.ev-toc { margin: 2.5rem 0 3.5rem; }
+.ev-toc ol { list-style: none; border-top: 1px solid var(--ink); counter-reset: toc; }
+.ev-toc li { counter-increment: toc; }
+.ev-toc a {
+  display: grid;
+  grid-template-columns: 2.5em 1fr;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--ink);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.ev-toc a::before { content: counter(toc, decimal-leading-zero); font-family: var(--font-label); color: var(--ink-55); font-variant-numeric: tabular-nums; }
+.ev-toc a:hover { font-weight: 600; }
+
+.ev-section { margin: 0 0 4.5rem; scroll-margin-top: 2rem; }
+.ev-section > h2 { display: flex; gap: 0.9rem; align-items: baseline; margin-bottom: 1rem; }
+.ev-section > h2 .num {
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--ink-55);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chart block */
+.ev-chart { border-top: 1px solid var(--ink); padding: 1.25rem 0 1.75rem; margin-top: 1.5rem; }
+.ev-chart h3 { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 0.25rem; }
+.ev .ev-chart__desc { font-size: 0.95rem; line-height: 1.55; margin-bottom: 0.5rem; }
+.ev-chart .plotly-chart { margin: 0; }
+.ev-chart .plotly-chart__plot { background: #fff; }
+.ev-chart figcaption { font-family: var(--font-label); font-size: 0.75rem; letter-spacing: 0.04em; color: var(--ink-55); }
+
+/* Data & methods */
+.ev-methods dl { display: grid; grid-template-columns: 140px 1fr; border-top: 1px solid var(--ink); }
+.ev-methods dt, .ev-methods dd { padding: 0.7rem 0; border-bottom: 1px solid var(--ink-18); }
+.ev-methods dt { font-family: var(--font-label); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-55); padding-top: 0.85rem; }
+.ev-methods dd { font-size: 0.95rem; color: var(--ink-75); }
+
+/* AI disclosure */
+.ev-note { border: 1px solid var(--ink); padding: 2rem; }
+.ev-note h2 { font-size: 1.3rem; margin-bottom: 1rem; }
+.ev-note p, .ev-note li { font-size: 0.95rem; }
+.ev-note ul { padding-left: 1.2rem; margin: 0 0 1.1rem; color: var(--ink-75); line-height: 1.7; }
+.ev-note p:last-child { margin-bottom: 0; }
+
+@media (max-width: 640px) {
+  .ev-hero .dek { font-size: 1.15rem; }
+  .ev-note { padding: 1.25rem; }
+  .ev-methods dl { grid-template-columns: 1fr; }
+  .ev-methods dt { border-bottom: 0; padding-bottom: 0; }
+}
+
+/* Title: the song-reference line in serif, "A Decade of Eurovision" underneath */
+.ev-subtitle {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--font-sans);
+  font-size: 0.42em;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink-55);
+}
+
+/* Essay text: parts, subsections, tables, references */
+.ev-part {
+  margin: 4.5rem 0 2.5rem;
+  padding-top: 0.75rem;
+  border-top: 3px solid var(--ink);
+}
+.ev-part .eyebrow { margin-bottom: 0.4rem; }
+.ev-part h2 { font-family: var(--font-serif); font-weight: 500; font-size: clamp(1.8rem, 3.4vw, 2.4rem); margin-bottom: 1rem; }
+.ev-sub { font-size: 1.1rem; font-weight: 600; margin: 2.25rem 0 0.75rem; }
+.ev-lit { margin-bottom: 0.5rem; }
+.ev-lit .eyebrow { margin-bottom: 0.5rem; }
+
+.ev-toc .ev-toc__part {
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-55);
+  padding: 1.25rem 0 0.4rem;
+  border-bottom: 1px solid var(--ink);
+  counter-increment: none;
+}
+.ev-toc .ev-toc__part:first-child { padding-top: 0.6rem; }
+.ev-toc ol { border-top: 0; }
+
+.ev-table { margin: 1.75rem 0 2rem; overflow-x: auto; }
+.ev-table table { width: 100%; border-collapse: collapse; font-size: 0.88rem; line-height: 1.45; }
+.ev-table caption { text-align: left; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.6rem; }
+.ev-table th {
+  text-align: left;
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-55);
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: 0.5rem 0.75rem 0.5rem 0;
+}
+.ev-table td { border-bottom: 1px solid var(--ink-18); padding: 0.55rem 0.75rem 0.55rem 0; vertical-align: top; color: var(--ink-75); }
+.ev-table td.num, .ev-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.ev-table tr.total td { border-top: 1px solid var(--ink); font-weight: 600; color: var(--ink); }
+.ev-table .src { font-family: var(--font-label); font-size: 0.75rem; letter-spacing: 0.04em; color: var(--ink-55); margin-top: 0.5rem; }
+
+.ev-refs ul { list-style: none; border-top: 1px solid var(--ink); }
+.ev-refs li {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink-75);
+  padding: 0.6rem 0 0.6rem 1.5rem;
+  text-indent: -1.5rem;
+  border-bottom: 1px solid var(--ink-18);
+  overflow-wrap: anywhere;
+}
+.ev-toc__extra { margin-top: 0; }
+.ev-toc__extra a::before { content: "·"; }
+
+/* Interpretation of the charts */
+.ev-read { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--ink); }
+.ev-read .eyebrow { margin-bottom: 0.6rem; }
+.ev-read p strong { color: var(--ink); font-weight: 600; }
+.ev-read__src { display: block; font-family: var(--font-label); font-size: 0.75rem; letter-spacing: 0.04em; color: var(--ink-55); }
+
+/* Two-way citation links (CitedReferences.astro) */
+.ev a.cite { color: inherit; text-decoration: underline dotted; text-decoration-color: var(--ink-35); text-underline-offset: 2px; }
+.ev a.cite:hover { text-decoration-style: solid; text-decoration-color: var(--ink); }
+.ev-refs .ref-back { margin-left: 0.4rem; white-space: nowrap; font-family: var(--font-label); font-size: 0.75rem; color: var(--ink-55); }
+.ev-refs .ref-back a { text-decoration: none; margin-right: 0.15rem; }
+.ev-refs .ref-back a:hover { text-decoration: underline; }
+.ev-refs li:target, .ev a.cite:target { background: var(--ink-08); }
+.ev-refs li, .ev a.cite { scroll-margin-top: 30vh; }

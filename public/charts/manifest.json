@@ -1,0 +1,308 @@
+[
+ {
+  "slug": "score_boxplot",
+  "notebook": "00",
+  "title": {
+   "en": "Final scores: boxplot with every entry",
+   "pt": "Pontuações na Final: boxplot com cada participação"
+  },
+  "description": {
+   "en": "Every Final entry as a point; hover to see country and year.",
+   "pt": "Cada participação na Final como um ponto; passe o cursor para ver país e ano."
+  },
+  "files": {
+   "en": "score_boxplot.en.json",
+   "pt": "score_boxplot.pt.json"
+  },
+  "height": 340
+ },
+ {
+  "slug": "annual_scores",
+  "notebook": "00",
+  "title": {
+   "en": "Scores in the Final by edition",
+   "pt": "Pontuações na Final por edição"
+  },
+  "description": {
+   "en": "Winner's score, median and interquartile range per year. The mean is fixed by the rules and shown for reference.",
+   "pt": "Pontuação do vencedor, mediana e intervalo interquartil por ano. A média é fixada pelas regras e aparece como referência."
+  },
+  "files": {
+   "en": "annual_scores.en.json",
+   "pt": "annual_scores.pt.json"
+  },
+  "height": 460
+ },
+ {
+  "slug": "boxplot_by_year",
+  "notebook": "00",
+  "title": {
+   "en": "Final scores by edition",
+   "pt": "Pontuações na Final por edição"
+  },
+  "description": {
+   "en": "Spread of scores in each Final; outliers are the runaway winners.",
+   "pt": "Dispersão das pontuações em cada Final; os outliers são os vencedores destacados."
+  },
+  "files": {
+   "en": "boxplot_by_year.en.json",
+   "pt": "boxplot_by_year.pt.json"
+  },
+  "height": 460
+ },
+ {
+  "slug": "country_means",
+  "notebook": "00",
+  "title": {
+   "en": "Mean points in the Final by country",
+   "pt": "Média de pontos na Final por país"
+  },
+  "description": {
+   "en": "Countries with at least five Finals. Bars show the mean; circles show each Final.",
+   "pt": "Países com pelo menos cinco Finais. As barras mostram a média; os círculos, cada Final."
+  },
+  "files": {
+   "en": "country_means.en.json",
+   "pt": "country_means.pt.json"
+  },
+  "height": 640
+ },
+ {
+  "slug": "jury_vs_televote",
+  "notebook": "00",
+  "title": {
+   "en": "Jury vs. televote points in the Final",
+   "pt": "Pontos do júri vs. televoto na Final"
+  },
+  "description": {
+   "en": "Each entry's jury and televote totals. Points far from the diagonal split the two electorates.",
+   "pt": "Totais de júri e televoto de cada participação. Pontos longe da diagonal dividem os dois eleitorados."
+  },
+  "files": {
+   "en": "jury_vs_televote.en.json",
+   "pt": "jury_vs_televote.pt.json"
+  },
+  "height": 560
+ },
+ {
+  "slug": "jury_televote_boxes",
+  "notebook": "01",
+  "title": {
+   "en": "Jury and televote scores compared",
+   "pt": "Pontuações do júri e do televoto comparadas"
+  },
+  "description": {
+   "en": "Distribution of each component across all Final entries.",
+   "pt": "Distribuição de cada componente em todas as participações na Final."
+  },
+  "files": {
+   "en": "jury_televote_boxes.en.json",
+   "pt": "jury_televote_boxes.pt.json"
+  },
+  "height": 440
+ },
+ {
+  "slug": "glm_curves",
+  "notebook": "02",
+  "title": {
+   "en": "Expected points by running-order position",
+   "pt": "Pontos esperados por posição na ordem de apresentação"
+  },
+  "description": {
+   "en": "Negative Binomial model. Running order is set by producers, so this is an association, not a causal effect.",
+   "pt": "Modelo Binomial Negativo. A ordem é definida pela produção, então trata-se de associação, não de efeito causal."
+  },
+  "files": {
+   "en": "glm_curves.en.json",
+   "pt": "glm_curves.pt.json"
+  },
+  "height": 460
+ },
+ {
+  "slug": "irr_forest",
+  "notebook": "02",
+  "title": {
+   "en": "Incidence rate ratios with 95% confidence intervals",
+   "pt": "Razões de incidência com intervalos de confiança de 95%"
+  },
+  "description": {
+   "en": "Effects relative to automatic qualifiers; values right of 1 mean more points.",
+   "pt": "Efeitos em relação aos qualificados automaticamente; valores à direita de 1 significam mais pontos."
+  },
+  "files": {
+   "en": "irr_forest.en.json",
+   "pt": "irr_forest.pt.json"
+  },
+  "height": 420
+ },
+ {
+  "slug": "permutation_null",
+  "notebook": "03",
+  "title": {
+   "en": "Permutation test for bloc voting",
+   "pt": "Teste de permutação para voto em bloco"
+  },
+  "description": {
+   "en": "Null distribution from 2,000 random reassignments of bloc labels; the dashed line is the observed difference.",
+   "pt": "Distribuição nula de 2.000 reatribuições aleatórias dos rótulos de bloco; a linha tracejada é a diferença observada."
+  },
+  "files": {
+   "en": "permutation_null.en.json",
+   "pt": "permutation_null.pt.json"
+  },
+  "height": 420
+ },
+ {
+  "slug": "top8_bloc_points",
+  "notebook": "03",
+  "title": {
+   "en": "Where the top countries' points come from",
+   "pt": "De onde vêm os pontos dos países de melhor desempenho"
+  },
+  "description": {
+   "en": "Mean points per voter from the same bloc versus other blocs, zero-point pairs included. Israel and Australia belong to no bloc.",
+   "pt": "Média de pontos por votante do mesmo bloco versus outros blocos, incluindo pares sem pontos. Israel e Austrália não pertencem a nenhum bloco."
+  },
+  "files": {
+   "en": "top8_bloc_points.en.json",
+   "pt": "top8_bloc_points.pt.json"
+  },
+  "height": 440
+ },
+ {
+  "slug": "bloc_breakdown",
+  "notebook": "03",
+  "title": {
+   "en": "Same-bloc advantage by bloc",
+   "pt": "Vantagem de mesmo bloco por bloco"
+  },
+  "description": {
+   "en": "Difference in mean points per pair, same bloc minus other blocs.",
+   "pt": "Diferença na média de pontos por par, mesmo bloco menos outros blocos."
+  },
+  "files": {
+   "en": "bloc_breakdown.en.json",
+   "pt": "bloc_breakdown.pt.json"
+  },
+  "height": 420
+ },
+ {
+  "slug": "points_matrix",
+  "notebook": "04",
+  "title": {
+   "en": "Who gives points to whom",
+   "pt": "Quem dá pontos a quem"
+  },
+  "description": {
+   "en": "Dot area is proportional to total points given in all Finals, 2016–2026; hover for the exact figure.",
+   "pt": "A área do ponto é proporcional aos pontos dados em todas as Finais, 2016–2026; passe o cursor para o valor exato."
+  },
+  "files": {
+   "en": "points_matrix.en.json",
+   "pt": "points_matrix.pt.json"
+  },
+  "height": 760
+ },
+ {
+  "slug": "ca_map",
+  "notebook": "04",
+  "title": {
+   "en": "Affinity map: donor and recipient profiles",
+   "pt": "Mapa de afinidades: perfis de doador e receptor"
+  },
+  "description": {
+   "en": "Countries close together distribute or receive points in similar proportions. Click a legend item to isolate it.",
+   "pt": "Países próximos distribuem ou recebem pontos em proporções semelhantes. Clique na legenda para isolar um grupo."
+  },
+  "files": {
+   "en": "ca_map.en.json",
+   "pt": "ca_map.pt.json"
+  },
+  "height": 640
+ },
+ {
+  "slug": "ca_map_blocs",
+  "notebook": "04",
+  "title": {
+   "en": "Affinity map by geopolitical bloc",
+   "pt": "Mapa de afinidades por bloco geopolítico"
+  },
+  "description": {
+   "en": "Donor profiles marked by bloc. Click a bloc in the legend to isolate it; double-click to restore.",
+   "pt": "Perfis de doador marcados por bloco. Clique em um bloco na legenda para isolá-lo; clique duas vezes para restaurar."
+  },
+  "files": {
+   "en": "ca_map_blocs.en.json",
+   "pt": "ca_map_blocs.pt.json"
+  },
+  "height": 680
+ },
+ {
+  "slug": "discord_series",
+  "notebook": "05",
+  "title": {
+   "en": "Jury–televote discord by year",
+   "pt": "Discordância júri-televoto por ano"
+  },
+  "description": {
+   "en": "Mean absolute gap between an entry's jury and televote points, with the interquartile range.",
+   "pt": "Diferença absoluta média entre os pontos de júri e de televoto de cada participação, com o intervalo interquartil."
+  },
+  "files": {
+   "en": "discord_series.en.json",
+   "pt": "discord_series.pt.json"
+  },
+  "height": 420
+ },
+ {
+  "slug": "intervention_fits",
+  "notebook": "05",
+  "title": {
+   "en": "Level-shift models around the rule changes",
+   "pt": "Modelos de mudança de nível nas alterações de regra"
+  },
+  "description": {
+   "en": "OLS with trend and a post-event dummy. About ten data points: an illustration, not causal evidence.",
+   "pt": "MQO com tendência e dummy pós-evento. Cerca de dez observações: ilustração, não evidência causal."
+  },
+  "files": {
+   "en": "intervention_fits.en.json",
+   "pt": "intervention_fits.pt.json"
+  },
+  "height": 440
+ },
+ {
+  "slug": "voting_network",
+  "notebook": "06",
+  "title": {
+   "en": "The strongest voting ties",
+   "pt": "Os laços de voto mais fortes"
+  },
+  "description": {
+   "en": "Countries arranged by bloc around the circle; line weight shows total points given. Use the slider to show more ties.",
+   "pt": "Países dispostos por bloco no círculo; a espessura mostra o total de pontos dados. Use o controle para mostrar mais laços."
+  },
+  "files": {
+   "en": "voting_network.en.json",
+   "pt": "voting_network.pt.json"
+  },
+  "height": 760
+ },
+ {
+  "slug": "reciprocal_pairs",
+  "notebook": "06",
+  "title": {
+   "en": "The most reciprocal voting pairs",
+   "pt": "Os pares de voto mais recíprocos"
+  },
+  "description": {
+   "en": "Top 20 pairs ranked by the smaller of the two directions, so both countries must vote for each other.",
+   "pt": "Os 20 pares principais pela menor das duas direções, de modo que ambos precisam votar um no outro."
+  },
+  "files": {
+   "en": "reciprocal_pairs.en.json",
+   "pt": "reciprocal_pairs.pt.json"
+  },
+  "height": 620
+ }
+]

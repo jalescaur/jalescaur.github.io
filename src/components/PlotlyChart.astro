@@ -1,0 +1,176 @@
+---
+/**
+ * Interactive monochrome chart from /public/charts/<slug>.<lang>.json
+ *
+ *   <PlotlyChart slug="ca_map_blocs" />
+ *   <PlotlyChart slug="glm_curves" caption="Source: Eurovisionworld.com" />
+ *   <PlotlyChart slug="voting_network" showTitle />
+ *
+ * Language follows the page locale (Astro i18n) unless `lang` is given.
+ * Dark mode: `theme="auto"` follows html[data-theme="dark"], html.dark,
+ * or the OS setting. Charts are pure black/white, so dark mode is an exact swap.
+ */
+import fs from "node:fs";
+import path from "node:path";
+
+interface Props {
+  slug: string;
+  lang?: "en" | "pt";
+  caption?: string;
+  showTitle?: boolean;
+  theme?: "auto" | "light" | "dark";
+  height?: number;
+  plotlySrc?: string;
+}
+
+const {
+  slug,
+  lang = (Astro.currentLocale as "en" | "pt") ?? "en",
+  caption,
+  showTitle = false,
+  theme = "auto",
+  height,
+  plotlySrc = "/vendor/plotly-cartesian-4.1.1.min.js",
+} = Astro.props;
+
+const manifestPath = path.join(process.cwd(), "public", "charts", "manifest.json");
+const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+const meta = manifest.find((m: { slug: string }) => m.slug === slug);
+if (!meta) throw new Error(`PlotlyChart: unknown slug "${slug}". Check public/charts/manifest.json.`);
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const src = `${base}/charts/${meta.files[lang] ?? meta.files.en}`;
+const title = meta.title[lang] ?? meta.title.en;
+const h = height ?? meta.height;
+---
+
+<figure class="plotly-chart">
+  {showTitle && <p class="plotly-chart__title">{title}</p>}
+  <div
+    class="plotly-chart__plot"
+    role="img"
+    aria-label={title}
+    data-src={src}
+    data-theme={theme}
+    data-slug={slug}
+    data-plotly-src={`${base}${plotlySrc}`}
+    style={`min-height:${h}px`}
+  >
+    <noscript>{title}</noscript>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .plotly-chart { margin: 2rem 0; }
+  .plotly-chart__title { font-weight: 600; margin: 0 0 0.5rem; }
+  .plotly-chart__plot { width: 100%; }
+  .plotly-chart figcaption { font-size: 0.875rem; margin-top: 0.5rem; }
+</style>
+
+<script>
+  const INK = "#000000";
+  const PAPER = "#FFFFFF";
+  const cache = new Map<string, any>();
+  let plotlyReady: Promise<any> | null = null;
+
+  function loadPlotly(src: string) {
+    if ((window as any).Plotly) return Promise.resolve((window as any).Plotly);
+    plotlyReady ??= new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = src;
+      s.onload = () => resolve((window as any).Plotly);
+      s.onerror = () => reject(new Error(`Could not load Plotly from ${src}`));
+      document.head.appendChild(s);
+    });
+    return plotlyReady;
+  }
+
+  // Plotly measures (and caches) text widths on first draw. The site loads
+  // Google Fonts asynchronously, so wait until Inter is actually loaded (max 3 s);
+  // otherwise legends are sized for the fallback font and get clipped.
+  let fontsReady: Promise<void> | null = null;
+  function waitForInter() {
+    fontsReady ??= new Promise<void>((resolve) => {
+      const t0 = performance.now();
+      const tick = () => {
+        const loaded = [...document.fonts].some((f) => f.family.replace(/["']/g, "") === "Inter" && f.status === "loaded");
+        if (loaded || performance.now() - t0 > 3000) return resolve();
+        document.fonts.load('13px "Inter"').catch(() => {});
+        setTimeout(tick, 100);
+      };
+      tick();
+    });
+    return fontsReady;
+  }
+
+  function isDark(pref: string) {
+    if (pref === "dark") return true;
+    if (pref === "light") return false;
+    const html = document.documentElement;
+    if (html.dataset.theme) return html.dataset.theme === "dark";
+    if (html.classList.contains("dark")) return true;
+    if (html.classList.contains("light")) return false;
+    return matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+
+  // Exact swap: the charts contain only INK and PAPER.
+  function invert(v: any): any {
+    if (v === INK) return PAPER;
+    if (v === PAPER) return INK;
+    if (Array.isArray(v)) return v.map(invert);
+    if (v && typeof v === "object") {
+      const o: any = {};
+      for (const k in v) o[k] = invert(v[k]);
+      return o;
+    }
+    return v;
+  }
+
+  async function render(el: HTMLElement) {
+    const src = el.dataset.src!;
+    if (!cache.has(src)) cache.set(src, fetch(src).then((r) => r.json()));
+    const [Plotly, fig] = await Promise.all([
+      loadPlotly(el.dataset.plotlySrc!), cache.get(src), waitForInter(),
+    ]);
+    let { data, layout } = structuredClone(fig);
+    // The page provides the heading; drop the in-chart title and its space.
+    layout.title = { text: "" };
+    layout.margin = { ...layout.margin, t: Math.max(24, (layout.margin?.t ?? 96) - 56) };
+    layout.autosize = true;
+    delete layout.width;
+    if (isDark(el.dataset.theme!)) ({ data, layout } = invert({ data, layout }));
+    el.querySelector("noscript")?.remove();
+    await Plotly.react(el, data, layout, {
+      responsive: true,
+      displaylogo: false,
+      displayModeBar: "hover",
+      modeBarButtonsToRemove: ["lasso2d", "select2d", "autoScale2d"],
+      toImageButtonOptions: { format: "svg", filename: el.dataset.slug },
+    });
+    el.dataset.rendered = "1";
+  }
+
+  function init() {
+    const els = [...document.querySelectorAll<HTMLElement>(".plotly-chart__plot:not([data-bound])")];
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { io.unobserve(e.target); render(e.target as HTMLElement); }
+      }),
+      { rootMargin: "400px 0px" },
+    );
+    els.forEach((el) => { el.dataset.bound = "1"; io.observe(el); });
+  }
+
+  function rerenderAll() {
+    document.querySelectorAll<HTMLElement>(".plotly-chart__plot[data-rendered]").forEach(render);
+  }
+
+  init();
+  document.addEventListener("astro:page-load", init);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", rerenderAll);
+  new MutationObserver(rerenderAll).observe(document.documentElement, {
+    attributes: true, attributeFilter: ["class", "data-theme"],
+  });
+</script>

@@ -1,0 +1,416 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EvChart from '../../components/EvChart.astro';
+import CitedReferences from '../../components/CitedReferences.astro';
+import '../../styles/eurovision.css';
+
+const lang = 'pt';
+const parts = [
+  { title: 'Parte I · Contexto', sections: [
+    { id: 'origins', title: 'Origens institucionais' },
+    { id: 'rules', title: 'Mecânica e regras do concurso' },
+    { id: 'voting-history', title: 'Sistemas de votação, 1956–2015' },
+    { id: 'voting-since-2016', title: 'Votação e apresentação desde 2016' },
+  ] },
+  { title: 'Parte II · Os dados, 2016–2026', sections: [
+    { id: 'scoreboard', title: 'O placar' },
+    { id: 'electorates', title: 'Dois eleitorados' },
+    { id: 'predictors', title: 'O que prevê os pontos' },
+    { id: 'blocs', title: 'Voto em bloco' },
+    { id: 'affinity', title: 'O mapa de afinidades' },
+    { id: 'network', title: 'A rede' },
+    { id: 'shocks', title: 'Choques: estudos de caso, 2016–2026' },
+  ] },
+  { title: 'Fechamento', sections: [
+    { id: 'conclusion', title: 'Quando o "Soft Power" vira hard' },
+  ] },
+];
+const order = parts.flatMap((p) => p.sections.map((s) => s.id));
+const n = (id: string) => String(order.indexOf(id) + 1).padStart(2, '0');
+---
+
+<BaseLayout
+  title="Entre Bangarangas, Bastus e Blues: Uma Década de Eurovision"
+  description="História, regras e geopolítica do Eurovision Song Contest, e dez Grandes Finais (2016–2026) em dados: pontuações, júri vs. televoto, voto em bloco, redes de votação e choques."
+>
+  <article class="ev">
+    <header class="ev-hero">
+      <span class="eyebrow">Projeto de dados · Trabalho de pós-graduação em Estatística</span>
+      <h1>Entre Bangarangas, Bastus e Blues</h1>
+      <p class="dek">Uma Década de Eurovision</p>
+      <div class="ev-meta">
+        <span>Jales Caur</span>
+        <span>Doutorando em Relações Internacionais</span>
+        <span>26 de setembro de 2026</span>
+      </div>
+    </header>
+
+    <p>A União Europeia de Radiodifusão (EBU, na sigla em inglês) organiza o Eurovision Song Contest (ESC) todos os anos desde 1956, com exceção de 2020 (Ginsburgh e Moreno-Ternero 2023), quando a pandemia de COVID-19 forçou seu cancelamento. O Guinness World Records o reconhece como a competição musical internacional televisionada anual mais longeva (Kroiss 2026; Guisinger 2024). Lançada uma década depois da Segunda Guerra Mundial, sua estreia foi um dos primeiros experimentos de televisão ao vivo, simultânea e transfronteiriça (Guisinger 2024), dando continuidade à missão da União Internacional de Radiodifusão do pré-guerra (European Broadcasting Union, s.d.). Setenta anos depois, o concurso atrai uma audiência televisiva estimada em mais de 100 milhões (<em>Guardian</em> 2026), e a política o atravessa, no palco e nos bastidores (Guisinger 2024), como se espera de um concurso que reúne tantos países, alguns deles nem sequer geograficamente europeus.</p>
+    <p>Este trabalho cobre quatro áreas: as origens institucionais e as regras do concurso; a história de seus sistemas de votação, com ênfase nas mudanças feitas pela EBU entre 2016 e 2026, que justificam o recorte temporal; a literatura acadêmica sobre viés de voto e soft power; e estudos de caso de 2016 a 2026, um período de boicotes, irregularidades na votação e disputas políticas. A Parte II confronta a literatura com os dados: todas as Grandes Finais de 2016 a 2026, em 18 gráficos interativos.</p>
+    <p>Trata-se de um estudo de caso exploratório e descritivo (Baxter e Jack 2008). Ele explora e descreve os últimos dez anos do Eurovision por meio da análise de documentos e da inferência de comportamentos a partir da análise estatística dos registros de votação. Como quebra-cabeça teórico, dialogo com a literatura sobre poder, em especial com o poder estrutural de Susan Strange (1988) e o soft power de Joseph Nye (1990). Por ser um estudo exploratório e descritivo, o foco está na análise dos dados, e não em aceitar ou rejeitar hipóteses.</p>
+
+    <nav class="ev-toc" aria-label="Sumário">
+      <ol>
+        {parts.map((p) => (
+          <>
+            <li class="ev-toc__part">{p.title}</li>
+            {p.sections.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}
+          </>
+        ))}
+      </ol>
+      <ol class="ev-toc__extra">
+        <li class="ev-toc__part">Notas</li>
+        <li><a href="#methods">Dados e métodos</a></li>
+        <li><a href="#acknowledgements">Agradecimentos</a></li>
+        <li><a href="#references">Referências</a></li>
+        <li><a href="#ai-disclosure">Uso de IA</a></li>
+      </ol>
+    </nav>
+
+    <!-- ============================================================ PARTE I -->
+    <div class="ev-part">
+      <span class="eyebrow">Parte I</span>
+      <h2>Contexto</h2>
+    </div>
+
+    <section class="ev-section" id="origins">
+      <h2><span class="num">{n('origins')}</span>Origens institucionais</h2>
+      <p>Em 1950, emissoras da Europa Ocidental se reuniram em Torquay, na Inglaterra, e fundaram a EBU. A nova união sucedeu a União Internacional de Radiodifusão (IBU) do pré-guerra, fundada em Genebra em 1925, e adotou o ethos de serviço público que John Reith e Arthur Burrows haviam promovido na BBC: as emissoras deveriam educar, informar e entreter, e construir entendimento entre fronteiras (European Broadcasting Union, s.d.).</p>
+      <p>O jornalista George Campey deu nome à rede: "Eurovision". A EBU transmitiu a coroação de Elizabeth II em 1953, o primeiro evento transmitido ao vivo internacionalmente, e lançou a rede Eurovision em 1954. Marcel Bezençon, do departamento de programação da EBU, defendeu a ideia de compartilhar programas entre países, e, quando os membros propuseram formatos capazes de atravessar fronteiras, um deles foi uma versão pan-europeia do Festival de Sanremo (European Broadcasting Union, s.d.), realizado todos os anos desde 1951 (Wikipedia 2026).</p>
+      <p>A primeira edição, chamada <em>Grand Prix Eurovision de la Chanson Européenne</em> (Kroiss 2026), aconteceu em 24 de maio de 1956 em Lugano, na Suíça, com sete países (European Broadcasting Union, s.d.): Bélgica, França, Alemanha, Itália, Luxemburgo, Países Baixos e Suíça. As regras de 1956 valeram uma única vez. Cada emissora inscreveu duas canções, e uma orquestra de 24 músicos acompanhou todas as participações (Wikipedia 2026); apenas artistas solo se apresentaram (Kroiss 2026).</p>
+      <p>A votação de 1956 carecia de transparência. Dois jurados por país davam em segredo a cada canção uma nota de 1 a 10, e 1956 continua sendo a única edição em que jurados puderam votar no próprio país. Os jurados de Luxemburgo não puderam comparecer, e a EBU permitiu que dois cidadãos suíços votassem em seu lugar. Lys Assia venceu pela Suíça com "Refrain", mas apenas o vencedor foi anunciado. A EBU não guardou as notas dos jurados, que são dadas como perdidas, e as tentativas posteriores de reconstruir a votação a partir das lembranças dos jurados fracassaram (Wikipedia 2026).</p>
+      <p>Nas décadas seguintes, o concurso se espalhou pela Área Europeia de Radiodifusão, que vai além da Europa geográfica e inclui o Norte da África e o Oriente Médio (Guisinger 2024). Em 1992, a OIRT, organização das emissoras da Europa Central e Oriental, fundiu-se com a EBU (European Broadcasting Union, s.d.), e a dissolução da União Soviética ampliou rapidamente o número de participantes (Guisinger 2024), deslocando o centro de gravidade do concurso para o leste. Hoje esse movimento também vai além da Europa: a emissora pública canadense, CBC/Radio-Canada, entrou na EBU em 2026 e estreará no Eurovision em 2027 (EBU 2026a; EBU 2026b), enquanto o Eurovision Asia leva o formato ainda mais longe pelo mundo.</p>
+    </section>
+
+    <section class="ev-section" id="rules">
+      <h2><span class="num">{n('rules')}</span>Mecânica e regras do concurso</h2>
+      <p>A EBU revisou o regulamento para manter o concurso justo, adaptá-lo às novas tecnologias e acomodar um número crescente de participantes em uma única transmissão.</p>
+
+      <h3 class="ev-sub">Canções e artistas</h3>
+      <p>As regras de 1956 limitavam as canções a três minutos, ou três e meio, e exigiam composições originais (Wikipedia 2026). Hoje cada país ainda inscreve uma canção nova e curta, apresentada ao vivo no idioma de sua escolha (Guisinger 2024).</p>
+      <p>As regras sobre quem pode subir ao palco mudaram aos poucos. O primeiro concurso admitiu apenas solistas; a EBU permitiu duplas em 1957 e grupos em 1971, e nenhuma atração pode ter mais de seis integrantes (Kroiss 2026). Sandra Kim venceu pela Bélgica em 1986 aos 13 anos; a idade mínima foi depois elevada para 16, de modo que ela deve continuar sendo a vencedora mais jovem (Kroiss 2026).</p>
+
+      <h3 class="ev-sub">Regras de idioma</h3>
+      <p>Entre 1977 e 1999, uma regra de "idioma nativo" obrigava cada país a cantar em uma de suas línguas oficiais. Os países com o inglês como língua oficial mantiveram vantagem: a Irlanda venceu seis vezes e o Reino Unido duas nesse período, e Malta, o outro participante que cantava em inglês, ficou entre os dez primeiros em todos os concursos de 1991 a 1998. A percepção dessa vantagem levou a EBU a flexibilizar a regra em 1999; o inglês é, de longe, a língua mais bem-sucedida do concurso (<em>Eye on the World</em> 2010). Em 2025, porém, muito mais canções do que antes foram cantadas em outras línguas que não o inglês (<em>OUPblog</em> 2025).</p>
+
+      <h3 class="ev-sub">Expansão: rebaixamento, semifinais e os Big Five</h3>
+      <p>Quando mais países quiseram competir do que cabia numa só noite, a EBU precisou de filtros. Primeiro usou o rebaixamento: os países com pior desempenho num ano ficavam de fora no seguinte, abrindo vagas para estreantes e para quem voltava (<em>Eye on the World</em> 2010). Desde 2000, os maiores financiadores, hoje França, Alemanha, Itália, Espanha e Reino Unido, têm vaga automática na final (Guisinger 2024; Kroiss 2026).</p>
+      <p>A partir de 2004, uma semifinal televisionada passou a filtrar os demais, e desde 2008 há duas, cada uma enviando dez atrações à final (Verrier 2012; Kroiss 2026). Com o anfitrião e os Big Five, a final tem 26 canções.</p>
+    </section>
+
+    <section class="ev-section" id="voting-history">
+      <h2><span class="num">{n('voting-history')}</span>Sistemas de votação, 1956–2015</h2>
+      <p>A EBU revisou continuamente o sistema de votação para equilibrar o julgamento especializado e o gosto do público e para limitar o viés político.</p>
+
+      <h3 class="ev-sub">Experimentos com júris (1956–1974)</h3>
+      <p>A EBU testou vários sistemas de júri antes de se fixar em um. No início, cada jurado dava um ponto à sua canção favorita; em outros anos, os júris davam 1, 2 e 3 pontos às favoritas, ou notas de 1 a 5 a todas as canções (Eurovision and Friends, s.d.).</p>
+
+      <h3 class="ev-sub">O sistema douze points (1975–1996)</h3>
+      <p>Em 1975, a EBU introduziu o sistema que ainda sustenta o concurso. Cada júri nacional, então com 11 membros, classificava suas dez canções favoritas e lhes dava 12, 10, 8, 7, 6, 5, 4, 3, 2 e 1 pontos, e os porta-vozes passaram a anunciá-los em ordem crescente, terminando no 12 (Eurovision and Friends, s.d.). A escala fixa limita o que um júri pode dar: mesmo a canção mais popular recebe no máximo 12 pontos, apenas dois a mais que a segunda colocada (Guisinger 2024).</p>
+
+      <h3 class="ev-sub">Televoto e voto da diáspora (1997–2008)</h3>
+      <p>Em 1997, cinco países (Áustria, Alemanha, Suécia, Suíça e Reino Unido) testaram a votação do público por telefone. No ano seguinte o televoto se generalizou, com os júris mantidos apenas como reserva em caso de falha técnica (Eurovision and Friends, s.d.), e a partir de 2004 tornou-se obrigatório (Kroiss 2026).</p>
+      <p>O televoto aumentou o engajamento do público e mudou os resultados. Vizinhos, países que compartilham idioma ou cultura e países com grandes diásporas no exterior trocaram as notas máximas ano após ano: migrantes turcos e armênios no noroeste da Europa, por exemplo, garantiam grandes votações à Turquia e à Armênia (<em>Eye on the World</em> 2010). Grandes blocos geográficos de votação surgiram a partir de meados dos anos 1990 (Gatherer 2006), e o televoto integral inclinou os resultados para o leste da Europa (<em>ESC Insight</em> 2022).</p>
+
+      <h3 class="ev-sub">O híbrido 50/50 (2009–2015)</h3>
+      <p>Para conter o voto em bloco, a EBU trouxe os júris de volta. A partir de 2008, um júri escolhia um dos dez classificados em cada semifinal, e em 2009 um júri profissional de cinco membros em cada país voltou à final com metade do peso. As classificações do júri e do televoto de cada país eram combinadas pela média num único conjunto de pontos, com o televoto desempatando (Eurovision and Friends, s.d.).</p>
+
+      <div class="ev-table">
+        <table>
+          <caption>Tabela 1. Sistemas de votação antes de 2016</caption>
+          <thead><tr><th>Período</th><th>Mecanismo</th><th>Pontos</th><th>Efeito</th></tr></thead>
+          <tbody>
+            <tr><td>1956–1974</td><td>Júris especializados, em vários formatos</td><td>De um ponto por jurado a escalas de 1–5</td><td>A pontuação mudava de ano para ano</td></tr>
+            <tr><td>1975–1996</td><td>100% júri especializado</td><td>12, 10, 8, 7, 6, 5, 4, 3, 2, 1</td><td>Um teto para o que um júri pode dar a uma canção</td></tr>
+            <tr><td>1997–2008</td><td>Principalmente televoto (obrigatório a partir de 2004)</td><td>12, 10, 8, 7, 6, 5, 4, 3, 2, 1</td><td>Voto da diáspora e voto em bloco regional</td></tr>
+            <tr><td>2009–2015</td><td>50/50 júri e televoto</td><td>Um conjunto 12–1 por país, pela média</td><td>Equilíbrio entre avaliação especializada e popularidade</td></tr>
+          </tbody>
+        </table>
+        <p class="src">Fontes: compilado de Eurovision and Friends (s.d.), Kroiss (2026), Guisinger (2024) e <em>Eye on the World</em> (2010).</p>
+      </div>
+    </section>
+
+    <section class="ev-section" id="voting-since-2016">
+      <h2><span class="num">{n('voting-since-2016')}</span>Votação e apresentação desde 2016</h2>
+      <p>Entre 2016 e 2026, a EBU reformulou tanto a matemática quanto a transmissão, buscando mais suspense, menos anomalias e uma audiência global.</p>
+
+      <h3 class="ev-sub">Votação separada (2016)</h3>
+      <p>Em 2016, a EBU deixou de fazer a média entre as classificações do júri e do televoto. Cada país passou a dar dois conjuntos separados de 12 a 1, um do júri e outro do televoto, cada um valendo metade dos pontos (Eurovision and Friends, s.d.), o que dobra os pontos em jogo.</p>
+      <p>Os júris votam primeiro, país por país, e os televotos combinados vêm depois. De 2016 a 2018, os totais do televoto eram lidos do menor para o maior. Em 2019, a EBU mudou a ordem: o último colocado nos júris conhece primeiro seu televoto, e o programa termina num duelo entre os líderes do júri (<em>ESC Insight</em> 2019).</p>
+
+      <h3 class="ev-sub">O peso de cada jurado</h3>
+      <p>A EBU também mudou a forma como as classificações de cada jurado compõem os pontos do júri nacional. O novo sistema favorece a concordância entre jurados, dando menos peso às classificações que se afastam muito da maioria (Guisinger 2024).</p>
+
+      <h3 class="ev-sub">Voto global e reformas após 2022 (2023–2026)</h3>
+      <p>Em 2022, em Turim, a EBU anulou os votos do júri de seis países após detectar padrões irregulares de votação (<em>ESC Insight</em> 2022), um escândalo de troca de votos entre seis países (Guisinger 2024).</p>
+      <p>O grupo de trabalho criado depois de Turim mudou as regras para 2023. As semifinais passaram a ser decididas 100% pelo televoto, com os júris apenas como reserva, enquanto os júris continuaram na final. Criou-se o voto do "Resto do Mundo": espectadores de países não participantes votam online, com verificação por cartão de crédito, e seus votos contam como um país a mais, que dá até 12 pontos (<em>ESC Insight</em> 2022).</p>
+      <p>Para 2026, a EBU mudou as regras sobre votos múltiplos e sobre promoção estatal de canções, reduzindo de 20 para 10 o número de votos por pessoa (<em>Guardian</em> 2026), e trouxe os júris de volta às semifinais (Eurovision and Friends, s.d.).</p>
+      <p>Com 35 participantes mais o voto do Resto do Mundo em 2026, o máximo teórico para uma participação chegou a 828 pontos: 12 de cada um dos outros 34 júris, 12 de cada um dos outros 34 televotos e 12 do Resto do Mundo (Eurovision and Friends, s.d.).</p>
+
+      <div class="ev-table">
+        <table>
+          <caption>Tabela 2. Pontuação máxima com votação separada (2026, 35 participantes)</caption>
+          <thead><tr><th>Componente</th><th>Cálculo</th><th class="num">Máximo</th></tr></thead>
+          <tbody>
+            <tr><td>Júris nacionais</td><td>(35 − 1) × 12</td><td class="num">408</td></tr>
+            <tr><td>Televotos nacionais</td><td>(35 − 1) × 12</td><td class="num">408</td></tr>
+            <tr><td>Resto do Mundo</td><td>1 × 12</td><td class="num">12</td></tr>
+            <tr class="total"><td>Total</td><td>408 + 408 + 12</td><td class="num">828</td></tr>
+          </tbody>
+        </table>
+        <p class="src">Fonte: Eurovision and Friends (s.d.).</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ PARTE II -->
+    <div class="ev-part">
+      <span class="eyebrow">Parte II</span>
+      <h2>Os dados, 2016–2026</h2>
+      <p>Pesquisadores de campos que vão da sociologia à econometria usam o concurso como uma base de dados controlada, um conjunto de trabalhos que Gatherer (2006) chamou de "eurovisiopsefologia". Quatro vertentes dessa literatura dizem respeito diretamente ao período posterior a 2016: conluio, blocos e redes; cultura, geografia e diáspora; júris, televoto e ordem de apresentação; e soft power e identidade europeia.</p>
+      <p>Grande parte dessa literatura é anterior à votação separada ou junta vários regimes de votação. Estudos que exploram os dados separados de júri e televoto a partir de 2016 ainda são relativamente poucos (Budzinski, Gänßle e Weimar 2023; Ginsburgh e Moreno-Ternero 2023; Kadoić, Žajdela Hrustek e Gligora Marković 2025), o que deixa a década de 2016–2026 aberta para uma análise sistemática. As seções abaixo confrontam cada vertente com as Grandes Finais dessa década.</p>
+    </div>
+
+    <section class="ev-section" id="scoreboard">
+      <h2><span class="num">{n('scoreboard')}</span>O placar</h2>
+      <div class="ev-table">
+        <table>
+          <caption>Tabela 3. Vencedores e principais acontecimentos, 2016–2026</caption>
+          <thead><tr><th>Ano</th><th>Cidade-sede</th><th>Vencedor</th><th>Artista e canção</th><th class="num">Pontos</th><th>Principais acontecimentos</th></tr></thead>
+          <tbody>
+            <tr><td>2016</td><td>Estocolmo</td><td>Ucrânia</td><td>Jamala, "1944"</td><td class="num">534</td><td>Introdução dos pontos separados de júri e televoto</td></tr>
+            <tr><td>2017</td><td>Kiev</td><td>Portugal</td><td>Salvador Sobral, "Amar pelos dois"</td><td class="num">758</td><td>Maior pontuação da história do concurso</td></tr>
+            <tr><td>2018</td><td>Lisboa</td><td>Israel</td><td>Netta, "Toy"</td><td class="num">529</td><td>Sediar o concurso em jogo numa disputa sobre a emissora pública israelense</td></tr>
+            <tr><td>2019</td><td>Tel Aviv</td><td>Países Baixos</td><td>Duncan Laurence, "Arcade"</td><td class="num">498</td><td>Televoto lido na ordem inversa do júri</td></tr>
+            <tr><td>2021</td><td>Roterdã</td><td>Itália</td><td>Måneskin, "Zitti e buoni"</td><td class="num">524</td><td>Retorno após o cancelamento de 2020</td></tr>
+            <tr><td>2022</td><td>Turim</td><td>Ucrânia</td><td>Kalush Orchestra, "Stefania"</td><td class="num">631</td><td>Rússia excluída; seis resultados de júri anulados</td></tr>
+            <tr><td>2023</td><td>Liverpool</td><td>Suécia</td><td>Loreen, "Tattoo"</td><td class="num">583</td><td>Voto do Resto do Mundo; semifinais só com televoto</td></tr>
+            <tr><td>2024</td><td>Malmö</td><td>Suíça</td><td>Nemo, "The Code"</td><td class="num">591</td><td>Joost Klein desclassificado; protestos contra Israel</td></tr>
+            <tr><td>2025</td><td>Basileia</td><td>Áustria</td><td>JJ, "Wasted Love"</td><td class="num">436</td><td>Campanha do governo israelense pelo voto popular</td></tr>
+            <tr><td>2026</td><td>Viena</td><td>Bulgária</td><td>Dara, "Bangaranga"</td><td class="num">516</td><td>70ª edição; boicote de cinco países; votos por pessoa reduzidos para 10</td></tr>
+          </tbody>
+        </table>
+        <p class="src">Fontes: vencedores, cidades-sede, canções e pontos, dados do Eurovisionworld; acontecimentos, as fontes citadas no texto.</p>
+      </div>
+      <EvChart slug="score_boxplot" lang={lang} />
+      <EvChart slug="annual_scores" lang={lang} />
+      <EvChart slug="boxplot_by_year" lang={lang} />
+      <EvChart slug="country_means" lang={lang} />
+      <div class="ev-read">
+        <span class="eyebrow">O que os dados mostram</span>
+        <p><strong>O Eurovision é uma economia em que o vencedor leva quase tudo.</strong> Entre as 257 participações que chegaram a uma Grande Final de 2016 a 2026, a pontuação mediana foi de 129 pontos, mas a média foi de 178. As regras fixam a média, já que todos os países distribuem os mesmos pontos, então a distância entre as duas é pura concentração: as 26 participações mais bem pontuadas, uma em cada dez, reuniram 29% de todos os pontos distribuídos, enquanto 43 terminaram abaixo de 50. Vinte e quatro passaram de 400.</p>
+        <p>Os vencedores são os outliers de cada ano. Os 758 pontos de Portugal em 2017 (Tabela 3) estão sozinhos no topo da década; os 436 da Áustria em 2025 foram a vitória mais modesta, apenas 79 pontos à frente de Israel, segundo colocado. O meio da tabela quase não se mexe: as medianas anuais ficam entre 103 (2024) e 170 (2018).</p>
+        <p>O ranking de países guarda um paradoxo. Entre os países com pelo menos cinco Finais, os cinco primeiros (Bulgária, com 355 pontos em média; Itália, 319; Ucrânia, 314; Suíça, 295; Suécia, 289) incluem apenas um membro dos Big Five, a Itália, que não fez menos de 124 pontos em dez Finais. Os três últimos são todos Big Five: Alemanha (69 em média, com 3 pontos em 2021), Reino Unido (86, com zero em 2021) e Espanha (92). A vaga garantida na Final que os financiadores têm desde 2000 (Guisinger 2024) os protege do rebaixamento, mas pular as semifinais parece lhes custar o afeto do público, um padrão que o televoto confirma na próxima seção. A Itália é a exceção, o que pode ser explicado pela força das atrações que saem de Sanremo e pelo engajamento do país com o próprio festival.</p>
+        <span class="ev-read__src">Dados: Eurovisionworld; cálculos do autor.</span>
+      </div>
+    </section>
+
+    <section class="ev-section" id="electorates">
+      <h2><span class="num">{n('electorates')}</span>Dois eleitorados</h2>
+      <div class="ev-lit">
+        <span class="eyebrow">O que diz a literatura</span>
+        <p>A votação separada, em vigor desde 2016, publica as notas do júri e do televoto em separado e abriu uma nova frente de estudos sobre os júris. Com dados de jurados individuais, Budzinski, Gänßle e Weimar (2023) constataram que a semelhança entre jurados e concorrentes produz um viés favorável e que a formação profissional importa. Jurados com formação em música clássica mostram viés significativamente menor do que apresentadores de rádio ou televisão e jornalistas musicais. Kadoić, Žajdela Hrustek e Gligora Marković (2025) examinaram se os júris conseguem avaliar objetivamente a qualidade das canções. Ginsburgh e Moreno-Ternero (2023) voltaram-se para as próprias regras de votação: usando o concurso de 2021, mostram que métodos alternativos de agregação poderiam ter mudado o resultado e defendem um procedimento baseado no valor de Shapley.</p>
+      </div>
+      <EvChart slug="jury_vs_televote" lang={lang} />
+      <EvChart slug="jury_televote_boxes" lang={lang} />
+      <div class="ev-read">
+        <span class="eyebrow">O que os dados mostram</span>
+        <p><strong>Dois gostos, uma correlação de 0,48.</strong> Júris e público concordam mais do que discordam, mas não muito. Nas 257 participações em Finais, a correlação de Pearson entre os totais do júri e do televoto é de 0,48 (Spearman 0,43). Os países que agradam aos júris também tendem a ir razoavelmente bem com o público, mas a relação é frouxa o bastante para que os dois divirjam com frequência em participações específicas. Isso condiz com a conhecida tensão entre atrações "de júri" (encenação profissional, técnica vocal, qualidade de composição) e atrações "de televoto" (apelo imediato, espetáculo, voto da diáspora e em bloco, potencial viral). Uma correlação desse tamanho, longe de 0 (independência), mas também longe de 0,8 ou mais (quase intercambiáveis), é a assinatura empírica que justifica analisar júri e televoto como variáveis dependentes separadas. A média dos dois é a mesma por construção (89 pontos), mas as distribuições diferem. O público polariza mais: sua participação mediana recebe 53 pontos, contra 67 dos júris, e catorze participações receberam zero no televoto, contra cinco no júri.</p>
+        <p>Os pontos longe da diagonal contam a história. O público levantou Israel 2024 (52 pontos do júri, 323 do televoto), Noruega 2019 (40 e 291), Moldávia 2022 (14 e 239) e Polônia 2016 (7 e 222), resultado que condiz com o voto da diáspora descrito para a Polônia na Irlanda e no Reino Unido (<em>Eye on the World</em> 2010). Os júris resgataram participações bem-acabadas que o público ignorou: Suécia 2018 (253 e 21), Áustria 2018 (271 e 71), Austrália 2017 (171 e 2) e, de forma mais gritante, Suíça 2025, com 214 pontos do júri e nenhum ponto do televoto. O Reino Unido 2021 é a única participação com zero dos dois lados.</p>
+        <p>Estudos anteriores constataram que painéis de especialistas se deixam levar menos do que o televoto pela proximidade cultural e geográfica (Verrier 2012). Dentro de um mesmo ano a concordância é ainda menor: o <em>ESC Insight</em> (2019) mediu correlações de posto de apenas 0,08, 0,07 e 0,24 entre as classificações do júri e do televoto em 2016, 2017 e 2018. E, analisando 2017–2023, Kadoić, Žajdela Hrustek e Gligora Marković (2025) constataram que os júris nacionais concordam entre si menos do que os públicos nacionais, o contrário do que pressupõe a missão de objetividade dos júris. Budzinski, Gänßle e Weimar (2023) mostram que a composição do júri molda seu viés; estes gráficos mostram o resultado agregado, uma distância de 52 a 76 pontos por participação, todos os anos (ver Choques).</p>
+        <span class="ev-read__src">Dados: Eurovisionworld; cálculos do autor.</span>
+      </div>
+    </section>
+
+    <section class="ev-section" id="predictors">
+      <h2><span class="num">{n('predictors')}</span>O que prevê os pontos</h2>
+      <div class="ev-lit">
+        <span class="eyebrow">O que diz a literatura</span>
+        <p>Estudos anteriores com dados do Eurovision constataram que a ordem de apresentação tem influência sistemática nos resultados (Antipov e Pokryshevskaya 2017). Bruine de Bruin (2005) relatou que as avaliações no Eurovision aumentavam com a posição na sequência, tanto no julgamento ao final quanto no julgamento passo a passo. Antipov e Pokryshevskaya (2017) encontraram apenas evidência fraca de efeito de ordem nas finais de 2009–2012, o último período em que a ordem de apresentação foi sorteada; desde 2013, a produção define a ordem, de modo que estudos sobre concursos posteriores não podem tratar a posição como exógena. Verrier (2012) associou os resultados da votação ao efeito de mera exposição.</p>
+      </div>
+      <EvChart slug="glm_curves" lang={lang} />
+      <EvChart slug="irr_forest" lang={lang} />
+      <div class="ev-read">
+        <span class="eyebrow">O que os dados mostram</span>
+        <p><strong>Cantar por último compensa, mas só com o público.</strong> No modelo Binomial Negativo, cada posição a mais na ordem de apresentação aumenta os pontos esperados em 1,8% (razão de incidência, IRR 1,018, IC 95% 1,003–1,033, p = 0,017). Numa Final de 26 canções isso se acumula: uma participação vinda da primeira semifinal tem expectativa de cerca de 149 pontos na posição 1 e de cerca de 232 na posição 26. Separando os eleitorados, o efeito é do televoto (IRR 1,028, p = 0,007); nos júris ele é pequeno e não significativo (IRR 1,008, p = 0,32).</p>
+        <p>A literatura esperava esse bônus. Bruine de Bruin (2005) constatou que apresentações mais tardias recebem notas mais altas, mesmo entre os júris profissionais da era anterior ao televoto, quer dessem as notas no fim do programa, quer canção por canção. Em 2016–2026, porém, o bônus só sobrevive no televoto. Antipov e Pokryshevskaya (2017), por sua vez, limitam qualquer leitura causal. Desde 2013 a produção define a ordem e pode colocar as canções fortes no fim. O modelo mede uma associação, não um efeito comprovado.</p>
+        <p>As participações vindas das semifinais fazem cerca de 30% mais pontos do que as classificadas automaticamente (IRR 1,29 e 1,30, p ≈ 0,06–0,07), e de novo a diferença está no televoto (IRR 1,62 e 1,50, ambos significativos). Verrier (2012) alertou que essa comparação mistura duas coisas: (1) a semifinal filtra as canções mais fracas, enquanto (2) os Big Five e o anfitrião pulam o teste. Comparando apenas semifinalistas (2008–2011), Verrier ainda constatou que os espectadores favoreciam as atrações da semifinal a que haviam assistido, um efeito de mera exposição. Os dados aqui não conseguem separar as duas leituras.</p>
+        <span class="ev-read__src">Dados: Eurovisionworld; cálculos do autor.</span>
+      </div>
+    </section>
+
+    <section class="ev-section" id="blocs">
+      <h2><span class="num">{n('blocs')}</span>Voto em bloco</h2>
+      <div class="ev-lit">
+        <span class="eyebrow">O que diz a literatura</span>
+        <p>Uma segunda vertente compara os votos observados com os que um processo sem viés geraria. Gatherer (2006) simulou concursos sem viés e, comparando-os com os resultados reais, encontrou padrões cambiantes de alianças de conluio. Mantzaris, Rein e Hopkins (2018a) estenderam essa abordagem de amostragem a todos os concursos desde 1957, construíram redes a partir de pares de atribuição de votos estatisticamente significativos e concluíram que os resultados sustentam a existência de conluio regional e de vieses ligados à proximidade e à cultura. Os testes de permutação para o viés de bloco pertencem a essa tradição.</p>
+      </div>
+      <EvChart slug="permutation_null" lang={lang} />
+      <EvChart slug="bloc_breakdown" lang={lang} />
+      <EvChart slug="top8_bloc_points" lang={lang} />
+      <div class="ev-read">
+        <span class="eyebrow">O que os dados mostram</span>
+        <p><strong>Os blocos existem, mas não estão em toda parte.</strong> Em média, um votante dá 2,99 pontos a mais a uma participação do próprio bloco do que a uma de outro bloco. Para testar se isso poderia acontecer por acaso, os rótulos de bloco foram embaralhados 2.000 vezes: as diferenças embaralhadas tiveram média de 0,11 e nunca passaram de 1,05. Nenhuma chegou perto do valor observado (p = 0,0005, o menor que o teste consegue registrar). O teste segue a lógica de Gatherer (2006) e de Mantzaris, Rein e Hopkins (2018a), que comparam o que os países fazem com o que um concurso sem viés produziria.</p>
+        <p>A média esconde um gradiente. O bloco ex-iugoslavo e albanês dá aos próprios membros o triplo do que dá aos demais (10,7 contra 3,5 pontos por par). O bloco ex-soviético (+4,6) e o nórdico-báltico (+4,2) vêm em seguida. Europa Ocidental (+0,8) e Europa Central (+0,6) quase não favorecem a si mesmas.</p>
+        <p>Os vencedores dependem dos blocos em graus diferentes. A Suécia recebe 13,0 pontos de cada votante nórdico-báltico e 6,2 dos demais, o sucesso mais dependente dos vizinhos entre os países do topo. Itália e Ucrânia recebem cerca de 11,4 dos seus blocos e 7,5 do resto. A Bulgária, vencedora de 2026, é a mais cosmopolita: 9,9 em casa, 8,7 fora. Israel e Austrália, que não pertencem a bloco nenhum, chegam ao topo apenas com votos de estranhos. Os blocos são um agrupamento analítico meu, não oficial; outras fronteiras mudariam esses números, embora a margem do teste deixe bastante espaço para isso.</p>
+        <span class="ev-read__src">Dados: Eurovisionworld; cálculos do autor.</span>
+      </div>
+    </section>
+
+    <section class="ev-section" id="affinity">
+      <h2><span class="num">{n('affinity')}</span>O mapa de afinidades</h2>
+      <div class="ev-lit">
+        <span class="eyebrow">O que diz a literatura</span>
+        <p>Estudos econométricos perguntam o que move o viés. Ginsburgh e Noury (2008) confrontaram a troca de votos com explicações culturais e concluíram que a proximidade linguística e cultural, e não a troca política de votos, explica a maior parte do viés aparente. Spierdijk e Vellekoop (2009) estimaram o viés separadamente para cada país e encontraram forte evidência de viés geográfico mesmo após controlar por cultura, idioma, religião e etnia, embora os padrões resultantes não correspondessem às acusações habituais. Analisando os concursos de 1981 a 2005, Clerides e Stengos (2012) encontraram grupos de países que trocam votos independentemente da qualidade de suas canções, alguma evidência de reciprocidade e nenhuma evidência de voto estratégico. Com um modelo hierárquico bayesiano, Blangiardo e Baio (2014) não encontraram evidência de viés negativo, mas sim um viés positivo leve e sistemático ligado à proximidade geográfica, à migração e a características culturais.</p>
+        <p>Budzinski e Pannicke (2017) aplicaram um mesmo método econométrico ao Eurovision (1998–2014) e ao concurso nacional alemão Bundesvision Song Contest (2005–2014) e encontraram vieses de magnitude semelhante em ambos, embora os participantes e eleitores do concurso nacional compartilhem uma base cultural muito mais homogênea. O padrão sugere que o público favorece vizinhos e parentes culturais esteja ou não a política internacional em jogo. Chipre deu à Grécia os 12 pontos máximos em 26 dos 31 concursos em que pôde fazê-lo (Guisinger 2024), e migrantes turcos e armênios no noroeste da Europa garantiam grandes votações à Turquia e à Armênia (<em>Eye on the World</em> 2010).</p>
+        <p>Evidências de survey complementam os dados de votação. Numa ampla pesquisa europeia, Stockemer et al. (2018) constataram que 11% dos entrevistados votariam estrategicamente no provável vencedor, enquanto 36% votariam numa canção que não era nem a favorita nem a provável vencedora, um resíduo que os autores associam ao voto de vizinhança, ao voto étnico e à afinidade com um país favorito.</p>
+      </div>
+      <EvChart slug="points_matrix" lang={lang} />
+      <EvChart slug="ca_map" lang={lang} />
+      <EvChart slug="ca_map_blocs" lang={lang} />
+      <div class="ev-read">
+        <span class="eyebrow">O que os dados mostram</span>
+        <p><strong>O mapa do Eurovision é desenhado por língua, migração e alcance das transmissões.</strong> Os maiores fluxos da matriz de pontos são Malta para a Itália (186 pontos na década), Albânia para a Itália (179), Grécia para Chipre (178), Dinamarca para a Suécia (168) e Chipre para a Grécia (161). San Marino, Croácia, Suíça e Eslovênia também deram à Itália mais de 125 pontos cada. A Itália atrai o Adriático e o mundo de língua italiana ao seu redor, que parece ser bastante fiel.</p>
+        <p>A análise de correspondência comprime a matriz em duas dimensões que retêm 31% de sua variação (18,9% e 11,9%), então o mapa é um esboço, não uma fotografia real. A primeira dimensão vai de um polo nórdico, báltico e anglófono (Dinamarca, Estônia, Irlanda, Letônia, Reino Unido, Noruega) aos Bálcãs ocidentais (Montenegro, Macedônia do Norte, Bósnia e Herzegovina, Croácia). A segunda separa o espaço ex-iugoslavo de um grupo do sudeste formado por Grécia, Chipre e Bulgária, junto com a Rússia e o Cáucaso. Como receptora, a Sérvia fica longe de todos, puxada pelos votos dos vizinhos ex-iugoslavos.</p>
+        <p>É a geografia que Ginsburgh e Noury (2008), Spierdijk e Vellekoop (2009) e Blangiardo e Baio (2014) encontraram: proximidade, língua compartilhada e migração, mais do que política. Como sugerem Budzinski e Pannicke (2017), o público favorece o que soa familiar, ou aquilo de que se sente mais próximo.</p>
+        <span class="ev-read__src">Dados: Eurovisionworld; cálculos do autor.</span>
+      </div>
+    </section>
+
+    <section class="ev-section" id="network">
+      <h2><span class="num">{n('network')}</span>A rede</h2>
+      <div class="ev-lit">
+        <span class="eyebrow">O que diz a literatura</span>
+        <p>Os primeiros trabalhos quantitativos trataram a votação como uma rede. Yair (1995) leu o padrão de pontos como um mapa das estruturas políticas e culturais da Europa. Fenn et al. (2006) reformularam os dados de votação como uma rede dinâmica, identificaram panelinhas e mediram quão "em sintonia" cada país estava com os demais; sua análise situou o Reino Unido perto do mainstream europeu e a França fora dele. Saavedra, Efstathiou e Reed-Tsochas (2007) examinaram a estrutura subjacente e a dinâmica dessa mesma rede de votação, e García e Tanase (2013) usaram o concurso para medir dinâmicas culturais ao longo do tempo.</p>
+      </div>
+      <EvChart slug="voting_network" lang={lang} />
+      <EvChart slug="reciprocal_pairs" lang={lang} />
+      <div class="ev-read">
+        <span class="eyebrow">O que os dados mostram</span>
+        <p><strong>Três sóis e muitos planetas.</strong> Itália (3.184 pontos recebidos na década), Suécia (2.876) e Ucrânia (2.799) são os polos da rede: das 100 ligações mais fortes, 53 apontam para um desses três. Israel (2.226) e França (2.120) formam um segundo anel.</p>
+        <p>A reciprocidade é mais rara do que parece. Ordenando os pares pela mais fraca das duas direções, de modo que os dois países precisem votar um no outro, Chipre e Grécia ficam sozinhos: 178 pontos num sentido e 161 no outro. Finlândia e Suécia (142 e 97), Noruega e Suécia (148 e 78) e Armênia e França (123 e 85, um laço mediado pela diáspora armênia na França) vêm bem atrás. A maioria das ligações fortes tem mão única. A Albânia deu 179 pontos à Itália; a Itália devolveu 62.</p>
+        <p>Fenn et al. (2006) encontraram panelinhas nessa rede, e Yair (1995) a leu como um mapa da estrutura cultural da Europa. Clerides e Stengos (2012) encontraram apenas alguma evidência de reciprocidade, e a assimetria aqui aponta na mesma direção: os países mandam seus pontos para os polos, e os polos raramente os devolvem.</p>
+        <span class="ev-read__src">Dados: Eurovisionworld; cálculos do autor.</span>
+      </div>
+    </section>
+
+    <section class="ev-section" id="shocks">
+      <h2><span class="num">{n('shocks')}</span>Choques: estudos de caso, 2016–2026</h2>
+      <p>Esses onze anos trouxeram inovação musical, uma audiência votante global e embates políticos que minaram a pretensão de neutralidade da EBU.</p>
+
+      <h3 class="ev-sub">Conflitos por procuração e solidariedade (2016–2022)</h3>
+      <p>Jamala, da Ucrânia, venceu em 2016 cantando a dor dos tártaros da Crimeia, uma canção ouvida como uma repreensão à anexação da Crimeia pela Rússia em 2014. No ano seguinte, com a Ucrânia como anfitriã, a Rússia desistiu depois que a Ucrânia barrou a artista escolhida, que havia se apresentado na Crimeia ocupada pela Rússia. Em 2022, após a invasão em larga escala da Ucrânia, a EBU de início manteve a participação russa e só excluiu a Rússia depois que vários outros membros ameaçaram boicotar o concurso (Guisinger 2024).</p>
+      <p>A votação separada ainda premiou a musicalidade. Os 758 pontos de Salvador Sobral por Portugal em 2017 continuam sendo a maior pontuação da história do concurso (Kroiss 2026; dados do Eurovisionworld), e em 2021 a Itália venceu o primeiro concurso após o cancelamento de 2020 (dados do Eurovisionworld).</p>
+      <p>Em 2022, o voto do público decidiu o concurso. "Stefania", da Ucrânia, recebeu 94% dos pontos de televoto possíveis, ficando em primeiro ou segundo lugar no voto do público de todos os países, exceto três (Guisinger 2024): 439 pontos, o maior televoto da década (dados do Eurovisionworld).</p>
+
+      <h3 class="ev-sub">Malmö (2024): desclassificação e protesto</h3>
+      <p>O concurso de 2024 em Malmö ocorreu durante a guerra em Gaza, e a participação de Israel, com Eden Golan, dividiu o público. Antes do concurso, a EBU obrigou Israel a reescrever sua canção: a original, "October Rain", tratava do trauma do ataque do Hamas em 7 de outubro (<em>Guardian</em> 2024). Milhares de manifestantes pró-Palestina, acompanhados pela ativista climática Greta Thunberg, marcharam em Malmö exigindo a exclusão de Israel, e apoiadores de Israel fizeram uma contramanifestação menor (<em>Guardian</em> 2024; <em>SBS News</em> 2024). Dentro da arena, segundo relatos, as vaias durante a apresentação de Golan foram abafadas com aplausos pré-gravados (<em>Complete Music Update</em> 2024).</p>
+      <p>Horas antes da final, a EBU desclassificou o holandês Joost Klein, que cantaria "Europapa", depois que uma integrante da equipe de produção registrou uma queixa na polícia sueca. Segundo a emissora holandesa AVROTROS, Klein havia pedido para não ser filmado ao sair do palco após sua semifinal e fez um "movimento ameaçador" em direção a uma operadora de câmera; a AVROTROS considerou a desclassificação desproporcional (<em>SBS News</em> 2024; <em>Complete Music Update</em> 2024). Nemo venceu pela Suíça com "The Code" (<em>Complete Music Update</em> 2024), com 591 pontos (dados do Eurovisionworld).</p>
+
+      <h3 class="ev-sub">Basileia (2025): escuridão e anomalias na votação</h3>
+      <p>Philip Bohlman descreveu as canções de 2025 como uma "jornada rumo à escuridão": muito mais canções do que antes foram cantadas em outras línguas que não o inglês, o que alguns leram como uma virada tradicionalista, e as letras se voltaram para temas sérios (<em>OUPblog</em> 2025).</p>
+      <p>A política seguiu o concurso até a Basileia, enquanto a invasão de Gaza continuava ao lado da guerra entre Rússia e Ucrânia. Segundo Bohlman, todas as formas de protesto pró-Palestina foram proibidas, bandeiras palestinas não foram permitidas e as vaias à israelense Yuval Raphael foram apagadas das transmissões. Raphael estava no meio da tabela depois do voto dos júris e, segundo relatos, saltou para o primeiro lugar depois que o governo israelense organizou uma enorme onda de votos populares nas redes sociais; só o último anúncio do televoto pôs JJ, da Áustria, à frente (<em>OUPblog</em> 2025). JJ venceu com 436 pontos, e Israel liderou o televoto (dados do Eurovisionworld).</p>
+
+      <h3 class="ev-sub">Viena (2026): boicote aos 70 anos</h3>
+      <p>O 70º concurso, em Viena, aconteceu sem cinco países. Irlanda, Espanha, Países Baixos, Eslovênia e Islândia o boicotaram pela participação de Israel enquanto continuavam os ataques em Gaza, depois que a EBU mudou suas regras de votação, mas não chegou a excluir a emissora israelense, a Kan (<em>Guardian</em> 2026).</p>
+      <p>Nemo, vencedor de 2024, devolveu o troféu em protesto. O britânico Look Mum No Computer terminou em último, e Bélgica e Alemanha também receberam zero ponto no voto do público (<em>Guardian</em> 2026).</p>
+      <p>A Bulgária venceu pela primeira vez. O país havia ficado de fora das três edições anteriores e venceu com "Bangaranga", de Dara, um hino de festa inspirado nos kukeri, um antigo ritual búlgaro de homens fantasiados com sinos e máscaras de animais (<em>Guardian</em> 2026). Com 516 pontos, a Bulgária liderou tanto o voto do júri quanto o televoto, a primeira vencedora a fazê-lo desde Portugal, em 2017 (dados do Eurovisionworld).</p>
+
+      <EvChart slug="discord_series" lang={lang} />
+      <EvChart slug="intervention_fits" lang={lang} />
+      <div class="ev-read">
+        <span class="eyebrow">O que os dados mostram</span>
+        <p><strong>Os choques foram barulhentos, mas breves.</strong> A distância entre o que júris e público dão à mesma participação fica entre 52 e 76 pontos por ano. Seus dois picos acompanham as crises políticas da década: 2022 (76 pontos, o ano dos 439 pontos da Ucrânia no televoto, contra 192 dos júris) e 2025 (73, o ano da campanha estatal de votos de Israel e do zero da Suíça no televoto). São participações isoladas que carregam os choques: o televoto de Israel foi seis vezes a nota do júri em 2024 (323 contra 52) e cerca de cinco vezes em 2025 (297 contra 60).</p>
+        <p>A estrutura absorveu os choques. Os modelos de intervenção perguntam se um evento deslocou a série inteira. Após a exclusão da Rússia e a invasão de 2022, a pontuação do vencedor subiu cerca de 147 pontos, mas o intervalo vai de −116 a +410 (p = 0,23). Após a chegada do voto do Resto do Mundo em 2023, a discordância entre júri e televoto caiu cerca de 4,8 pontos, com intervalo de −28 a +18 (p = 0,64). Com cerca de dez pontos de dados por série, nenhuma estimativa consegue separar o evento do ruído. Esses ajustes são ilustrações, não evidência causal.</p>
+        <p>Os estudos de caso mostram um concurso sacudido por guerra, boicotes e campanhas (<em>Guardian</em> 2024, 2026; <em>OUPblog</em> 2025). Os dados mostram que a ossatura da votação resistiu: os mesmos blocos, os mesmos polos, a mesma divisão entre júris e público. A política muda a manchete de cada ano; ainda não mudou a gramática do voto.</p>
+        <span class="ev-read__src">Dados: Eurovisionworld; cálculos do autor.</span>
+      </div>
+    </section>
+
+    <!-- ============================================================ FECHAMENTO -->
+    <section class="ev-section" id="conclusion">
+      <h2><span class="num">{n('conclusion')}</span>Quando o "Soft Power" vira hard</h2>
+      <p>A sinalização política hoje vai muito além do comportamento de voto. Ela também molda a pergunta básica sobre quem pode participar. Desde 2022, a EBU tem dificuldade para explicar por que Rússia e Israel deveriam ser tratados de forma diferente. A Rússia foi excluída do Eurovision pouco depois da invasão em larga escala da Ucrânia. Em sua decisão, a EBU argumentou que uma participação russa "traria descrédito à competição" e minaria os valores associados ao concurso. As emissoras russas integrantes da EBU anunciaram então a intenção de deixar a organização (EBU 2022a; EBU 2022b).</p>
+      <p>O problema para a EBU é que a decisão de 2022 criou um critério que o público e as emissoras podiam reutilizar. A exclusão da Rússia não foi apresentada apenas como uma questão técnica de filiação. A EBU também invocou a reputação e os valores do Eurovision. A partir daí, os argumentos posteriores de que o concurso apenas representa emissoras, e não Estados, ficaram mais difíceis de sustentar.</p>
+      <p>Isso ficou claro durante a guerra em Gaza. A EBU defendeu a permanência de Israel com argumentos institucionais. A KAN continuava sendo um membro elegível, e a EBU insistiu repetidamente na independência da emissora em relação ao governo israelense. Em 2025, por exemplo, a organização respondeu às objeções da espanhola RTVE dizendo que todos os membros da EBU continuavam elegíveis para competir. Mais tarde naquele ano, também apontou a pressão política contra a KAN dentro de Israel como prova da independência da emissora (EBU 2025a; EBU 2025b).</p>
+      <p>Há aqui uma distinção institucional. As emissoras russas e a KAN não mantêm a mesma relação com seus respectivos governos, e as emissoras russas anunciaram sua saída da EBU depois da exclusão de 2022. Mas a distinção não elimina o problema político. O público encontra Rússia e Israel no Eurovision por meio de bandeiras, nomes de países, comentaristas e blocos nacionais de votação. O Eurovision pede ao público que trate as participações como representantes nacionais durante toda a transmissão e, depois, que separe emissora e Estado quando a participação se torna politicamente controversa.</p>
+      <p>O boicote de 2026 mostrou os limites dessa posição. Espanha, Irlanda, Países Baixos, Eslovênia e Islândia ficaram de fora do concurso por causa da participação de Israel e da guerra em Gaza. Sua ausência reduziu o concurso a 35 países, o menor desde 2003 (Reuters 2026). O peso dessas saídas está em parte em quem saiu. A Irlanda tem uma das histórias mais longas e bem-sucedidas do Eurovision. A Espanha faz parte dos "Big Five". Os Países Baixos participaram do primeiro concurso, em 1956. Não eram emissoras periféricas, com uma relação curta ou intermitente com o Eurovision.</p>
+      <p>Essas saídas expuseram uma fraqueza no papel do Eurovision como fonte de soft power europeu. Nye define soft power como a capacidade de obter os resultados desejados por meio da atração, e não da coerção ou do pagamento. Cultura, valores políticos e instituições podem se tornar recursos de poder quando outros os veem como legítimos ou atraentes (Nye 1990, 166–71; Nye 2004, 5–11). O Eurovision se encaixa nesse quadro de forma incomum. Ele não vende nenhum programa político formal. Em vez disso, apresenta uma versão da Europa que o público é convidado a apreciar: plural, tecnologicamente conectada, competitiva sem violência e à vontade com a diferença nacional.</p>
+      <p>A EBU passou décadas construindo essa atração. Bandeiras nacionais aparecem por toda parte, mas os países competem sob regras comuns. A rivalidade termina em pontos, não em força. Países pequenos dividem o mesmo palco com os grandes. A própria produção transforma a cooperação entre emissoras públicas em entretenimento. Nos termos de Nye, o Eurovision funciona quando o público acha os valores representados pela instituição atraentes o bastante para que ela não precise impô-los (Nye 2004, 6).</p>
+      <p>As saídas de 2026 danificaram essa imagem porque a divergência dizia respeito à legitimidade da própria instituição. Várias emissoras tradicionais deixaram de aceitar as regras da EBU como uma forma adequada de lidar com a disputa política em torno de Israel. O boicote não destruiu a atração do Eurovision, mas revelou que ela já não podia ser dada como certa entre seus membros tradicionais.</p>
+      <p>A entrada do Canadá em 2027 torna a situação mais interessante. A CBC/Radio-Canada tornou-se membro pleno da EBU em junho de 2026, e a EBU confirmou no mês seguinte que o Canadá estrearia no Eurovision na Bulgária. Será o primeiro país novo desde a entrada da Austrália, em 2015 (EBU 2026a; EBU 2026b).</p>
+      <p>A chegada do Canadá mostra que o Eurovision ainda tem considerável poder de atração cultural fora da Europa. Mais do que isso, ela muda o tipo de comunidade que o concurso representa. A inclusão da Austrália já havia enfraquecido qualquer definição geográfica simples do Eurovision. O Canadá estende o concurso através do Atlântico. A fronteira relevante é cada vez mais institucional do que continental: a participação depende do acesso ao sistema de radiodifusão da EBU, e não da localização física dentro da Europa.</p>
+      <p>Essa expansão cria um momento desconfortável para a identidade de soft power do Eurovision. Uma organização nascida para conectar emissoras europeias atrai novos membros fora da Europa enquanto algumas emissoras no centro de sua rede europeia tradicional se retiram. O quadro de Nye ajuda a explicar por que essa contradição importa. O soft power depende da atração, mas a atração depende em parte da credibilidade. Uma instituição cultural pode alcançar um público maior enquanto perde o consenso sobre os valores que diz representar (Nye 2004, 99–101).</p>
+      <p>O Eurovision 2027 vai expor essas tensões em Burgas. A Bulgária conquistou o direito de sediar o concurso depois que Dara venceu em 2026 com "Bangaranga", a primeira vitória do país no Eurovision. A EBU e a BNT escolheram Burgas para os três programas, em 11, 13 e 15 de maio de 2027, na Arena Burgas (EBU 2026c).</p>
+      <p>Burgas dá ao concurso um cenário geográfico diferente das cidades-sede recentes. A cidade fica no Mar Negro, num Estado-membro da UE e da OTAN muito mais próximo da geografia de segurança criada pela guerra da Rússia contra a Ucrânia do que Viena, Basileia, Malmö ou Liverpool. Esse cenário vai impor exigências incomuns à emissora anfitriã e à EBU. Elas terão de administrar os problemas comuns de uma grande produção televisiva ao vivo ao lado de protestos, da segurança das delegações, de discussões sobre bandeiras e símbolos e das disputas contínuas sobre Israel, Gaza e Rússia.</p>
+      <p>A estreia canadense acrescenta mais uma camada. Burgas vai sediar um concurso que se torna menos geograficamente europeu ao mesmo tempo que algumas emissoras europeias contestam suas fronteiras políticas. A EBU terá de administrar expansão e fragmentação interna no mesmo evento. Também terá de convencer as emissoras participantes de que as regras sobre expressão política, campanhas e votação são aplicadas de forma previsível.</p>
+      <p>Susan Strange oferece um quadro melhor do que o soft power, sozinho, para entender esse problema institucional. Nye ajuda a explicar a atração. Strange pergunta quem define as estruturas dentro das quais os outros atores fazem suas escolhas. Para Strange, o poder estrutural é a capacidade de determinar os marcos dentro dos quais Estados, empresas e indivíduos operam, e não simplesmente vencer um confronto específico (Strange 1988, 24–25). Ela divide esse poder em quatro estruturas relacionadas: segurança, produção, finanças e conhecimento (Strange 1988, 26–32).</p>
+      <p>O Eurovision dá à EBU uma forma limitada, mas real, de poder estrutural. A organização decide quem pode entrar, qual emissora conta como representante elegível, como os votos se convertem em pontos, que formas de expressão política violam as regras e o que uma emissora anfitriã deve oferecer. Os participantes não negociam essas questões do zero a cada ano. Eles entram numa estrutura cujas regras principais a EBU já controla.</p>
+      <p>A estrutura de segurança expõe os limites desse controle. Strange trata a segurança como fonte de poder estrutural porque os atores que oferecem proteção, ou que a ameaçam, moldam as escolhas disponíveis aos demais (Strange 1988, 45–63). O Eurovision, por si só, não pode determinar o ambiente de segurança europeu. As guerras na Ucrânia e em Gaza entram no concurso de fora para dentro. A EBU pode decidir se emissoras russas ou israelenses participam, mas não pode impedir que governos, artistas, manifestantes ou o público interpretem essas decisões à luz dos próprios conflitos.</p>
+      <p>A comparação entre Rússia e Israel mostra, portanto, tanto o poder quanto a fraqueza da EBU. A organização pôde excluir a Rússia em 2022. Pôde manter Israel nos concursos seguintes. Essas decisões moldaram o campo de participação. Mas a EBU não pôde obrigar seus membros a aceitar a mesma interpretação dessas decisões. Cinco emissoras exerceram o próprio poder em 2026 ao se recusarem a participar.</p>
+      <p>A estrutura de produção dá à EBU um controle mais firme. Strange define o poder de produção em termos de quem decide o que é produzido, por quem, onde e em que condições (Strange 1988, 64–88). O Eurovision é uma produção televisiva antes de se tornar um símbolo político. A EBU coordena padrões técnicos, regras de classificação, o sistema de votação e as condições impostas a quem sedia o concurso. Em 2027, Burgas passa a fazer parte dessa estrutura de produção. Durante várias semanas, a cidade vai receber delegações, emissoras, jornalistas, fãs e a infraestrutura exigida por uma das maiores transmissões de entretenimento ao vivo do mundo.</p>
+      <p>O Canadá também se encaixa nessa estrutura. Sua entrada amplia a rede de emissoras capazes de produzir e distribuir conteúdo do Eurovision. A EBU informou que mais de 130 milhões de pessoas em 35 mercados assistiram ao concurso de 2026, enquanto suas plataformas de redes sociais geraram níveis muito altos de engajamento (EBU 2026b). O Canadá acrescenta a essa rede de produção mais uma grande emissora pública e mais um mercado de mídia.</p>
+      <p>A estrutura financeira de Strange também importa. Ela associa o poder financeiro ao controle sobre o crédito e à capacidade de determinar as condições em que a atividade econômica acontece (Strange 1988, 89–118). O Eurovision não reproduz as finanças globais de forma direta, mas o dinheiro molda o que o concurso pode vir a ser. As emissoras pagam taxas de participação. Quem sedia arca com custos organizacionais consideráveis. Patrocinadores, turismo, venda de ingressos e exposição na mídia tornam o evento economicamente valioso. Emissoras menores enfrentam restrições diferentes das grandes emissoras públicas. A capacidade de sediar, ou mesmo de participar, depende em parte de recursos financeiros distribuídos de forma desigual pela área do Eurovision.</p>
+      <p>A estrutura do conhecimento é a que mais se aproxima da importância política do Eurovision. Strange usa o conhecimento em sentido amplo. O poder pertence em parte a quem controla a informação, a tecnologia e os termos pelos quais os outros entendem o mundo (Strange 1988, 119–38). Em trabalhos posteriores, ela argumentou que o controle sobre o conhecimento e a informação podia atravessar fronteiras territoriais tão facilmente quanto as finanças ou a produção (Strange 1996, ix–xviii).</p>
+      <p>A EBU exerce esse tipo de poder há décadas. O Eurovision ensina ao público como é a sua versão da Europa. A transmissão coloca os países no mesmo placar, dá a eles os mesmos três minutos e traduz a geografia política em entretenimento. Mapas, bandeiras, comentaristas e sequências de votação transformam a "Europa" em algo que os espectadores podem assistir uma vez por ano. A Austrália e agora o Canadá mostram que essa categoria nunca foi puramente geográfica.</p>
+      <p>A dificuldade é que a EBU já não controla esse significado com a mesma segurança de antes. "United by Music" apresenta uma interpretação do concurso. As emissoras que boicotaram apresentam outra. A EBU diz que a participação pertence às emissoras, mas a própria transmissão organiza a competição em torno de países. Ela pode se descrever como apolítica, enquanto suas decisões sobre elegibilidade têm consequências políticas que emissoras nacionais e o público debatem abertamente.</p>
+      <p>Nye e Strange captam, assim, partes diferentes do mesmo problema. O Eurovision gera soft power porque as pessoas escolhem assisti-lo, imitá-lo, competir nele e, no caso do Canadá, entrar nele. Sua atratividade dá à EBU influência sem coerção (Nye 1990; 2004). O poder estrutural explica o que acontece depois que essa atração traz as emissoras para dentro da instituição. A EBU escreve as regras, define a elegibilidade e controla a arquitetura da competição. A abordagem de Strange desvia a atenção da pergunta sobre se a EBU "vence" uma discussão e a dirige para quem determina as condições em que essa discussão acontece (Strange 1988, 24–32).</p>
+      <p>Os acontecimentos desde 2022 sugerem que essas duas formas de poder já não se reforçam com a mesma facilidade de antes. A EBU ainda tem uma autoridade estrutural considerável sobre o concurso. Pode mudar as regras de votação, admitir novos membros e determinar as condições de participação. Seu soft power parece menos seguro porque várias emissoras de longa data agora questionam a legitimidade dessas escolhas.</p>
+      <p>Burgas 2027 vai testar as duas. O Canadá vai chegar como prova de que o Eurovision ainda atrai atores muito além da Europa. O cenário do Mar Negro também vai manter o concurso fisicamente próximo de uma das maiores crises de segurança da Europa. Enquanto isso, as disputas sobre Israel e o boicote de 2026 continuarão fazendo parte do pano de fundo institucional.</p>
+      <p>Visto pelas lentes de Strange, o Eurovision oferece um pequeno modelo do próprio poder europeu. A Europa continua forte em construir estruturas. Ela cria regras, padrões técnicos, mercados, sistemas de radiodifusão e instituições às quais os de fora muitas vezes querem se juntar. Nye ajuda a explicar por que essas estruturas viajam: elas ganham influência quando os outros acham atraentes a cultura e os valores que as cercam. O problema mais difícil começa quando os europeus discordam sobre os valores por trás das regras.</p>
+      <p>Essa tensão dá ao Eurovision mais valor analítico do que seu status de entretenimento poderia sugerir. A EBU ainda pode organizar o palco, decidir quem entra e distribuir os pontos. Tem muito menos controle sobre o que a participação significa hoje. A história do Eurovision desde 2022 sugere que o poder europeu continua eficaz em construir instituições e espaços culturais, mas se torna mais frágil quando essas instituições precisam carregar questões não resolvidas de guerra, legitimidade e responsabilidade política.</p>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="ev-section ev-methods" id="methods">
+      <h2>Dados e métodos</h2>
+      <dl>
+        <dt>Cobertura</dt>
+        <dd>Grandes Finais de 2016 a 2026 (sem concurso em 2020). 2016 é o primeiro ano com pontuações separadas de júri e televoto.</dd>
+        <dt>Fonte</dt>
+        <dd>Eurovisionworld.com: resultados, pontos bilaterais e ordem de apresentação.</dd>
+        <dt>Limpeza</dt>
+        <dd>Não classificados removidos dos resultados da Final; colunas de júri e televoto realinhadas e conferidas com os totais oficiais; pares sem pontos restaurados a partir da grade completa votante × participante.</dd>
+        <dt>Métodos</dt>
+        <dd>Estatística descritiva, regressão Binomial Negativa, testes de permutação, análise de correspondência, análise de redes e modelos de intervenção.</dd>
+        <dt>Ferramentas</dt>
+        <dd>Python (pandas, NumPy, SciPy, statsmodels, NetworkX), Plotly para os gráficos, Astro para esta página.</dd>
+      </dl>
+    </section>
+
+    <section class="ev-section ev-thanks" id="acknowledgements">
+      <h2>Agradecimentos</h2>
+      <p>Os dados deste projeto vêm do <a href="https://eurovisionworld.com">Eurovisionworld</a>. Agradeço à equipe do Eurovisionworld por autorizar a coleta desses dados em seu site.</p>
+      <p>A Bruno L., Laura L., Nicole C. e Pâmella S.: obrigado por fazerem do Eurovision uma experiência calorosa e por cada momento que dividimos com as canções do ESC, do primeiro "Nåjaa" ao último "betão". Meus douze points são para vocês. Algumas dessas canções sempre vão soar como vocês.</p>
+    </section>
+
+    <CitedReferences heading="Referências" backLabel="Voltar à citação" />
+
+    <section class="ev-section" id="ai-disclosure">
+      <div class="ev-note">
+        <h2>Uso de inteligência artificial</h2>
+        <p>
+          Este projeto foi feito com a ajuda de IA generativa (Claude, da Anthropic). Usei-a como
+          assistente de pesquisa no trabalho técnico:
+        </p>
+        <ul>
+          <li>coescrever e depurar o código em Python que limpa os dados, ajusta os modelos e gera os gráficos;</li>
+          <li>verificar erros e inconsistências nos dados;</li>
+          <li>construir esta página, traduzir os rótulos dos gráficos entre inglês e português e traduzir um primeiro rascunho em português, que depois revisei extensivamente;</li>
+          <li>revisar as interpretações "O que os dados mostram" a partir dos dados dos gráficos.</li>
+        </ul>
+        <p>
+          As perguntas de pesquisa e as escolhas analíticas são minhas. Escrevi e revisei todos os textos
+          e informações desta página, e respondo por qualquer erro. Todos os números desta página vêm de
+          código que pode ser executado de novo sobre os dados de origem.
+        </p>
+        <p>
+          Declaro isso de propósito. Dizer quais ferramentas moldaram um trabalho faz parte do bom
+          método, assim como citar o software ou a base de dados por trás de um resultado. Isso
+          permite ao leitor avaliar o trabalho pelo que ele é e ajuda a normalizar um uso honesto e
+          responsável da IA na pesquisa, em vez de escondê-lo.
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

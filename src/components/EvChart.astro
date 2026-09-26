@@ -1,0 +1,25 @@
+---
+/**
+ * A chart block laid out like the kit's gallery: black top rule, title and
+ * description above, the plot on white, source below. Always the light
+ * theme: white background, black figures.
+ */
+import fs from "node:fs";
+import path from "node:path";
+import PlotlyChart from "./PlotlyChart.astro";
+
+interface Props { slug: string; lang: "en" | "pt"; source?: string; }
+const { slug, lang } = Astro.props;
+
+const manifest = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), "public", "charts", "manifest.json"), "utf8"),
+);
+const meta = manifest.find((m: { slug: string }) => m.slug === slug);
+const source = Astro.props.source ?? (lang === "pt" ? "Fonte: Eurovisionworld.com" : "Source: Eurovisionworld.com");
+---
+
+<article class="ev-chart" id={`chart-${slug}`}>
+  <h3>{meta.title[lang]}</h3>
+  <p class="ev-chart__desc">{meta.description[lang]}</p>
+  <PlotlyChart slug={slug} lang={lang} theme="light" caption={source} />
+</article>
