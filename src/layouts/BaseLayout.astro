@@ -4,11 +4,20 @@ import Sidebar from '../components/Sidebar.astro';
 import Footer from '../components/Footer.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
-interface Props { title?: string; description?: string; }
+interface Props {
+  title?: string;
+  description?: string;
+  /** Link-preview image (LinkedIn, WhatsApp, X…): a path under public/, ideally 1200×630. */
+  image?: string;
+  imageAlt?: string;
+  /** "article" for articles; pages default to the author profile. */
+  ogType?: 'profile' | 'article';
+}
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const { title = t('site.title'), description = t('site.description') } = Astro.props;
+const { title = t('site.title'), description = t('site.description'), image, imageAlt, ogType = 'profile' } = Astro.props;
+const imageUrl = image ? new URL(image, 'https://jalescaur.com').href : undefined;
 
 const canonicalUrl = new URL(Astro.url.pathname, 'https://jalescaur.com');
 const fullTitle = title === t('site.title') ? title : `${title} · ${t('site.title')}`;
@@ -27,17 +36,22 @@ const fullTitle = title === t('site.title') ? title : `${title} · ${t('site.tit
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="profile" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content="jales caur" />
     <meta property="og:locale" content={lang === 'pt' ? 'pt_BR' : 'en_US'} />
-    <meta property="profile:first_name" content="Jales" />
-    <meta property="profile:last_name" content="Caur" />
+    {ogType === 'profile' && <meta property="profile:first_name" content="Jales" />}
+    {ogType === 'profile' && <meta property="profile:last_name" content="Caur" />}
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    {imageUrl && <meta property="og:image:width" content="1200" />}
+    {imageUrl && <meta property="og:image:height" content="630" />}
+    {imageUrl && imageAlt && <meta property="og:image:alt" content={imageAlt} />}
 
     <!-- Twitter/X Card -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
 
